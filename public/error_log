@@ -1,0 +1,4 @@
+[27-Nov-2018 08:04:10 UTC] PHP Warning:  require(/home/daominhh1/public_html/public/vendor/autoload.php): failed to open stream: No such file or directory in /home/daominhh1/public_html/public/index.php on line 24
+[27-Nov-2018 08:04:10 UTC] PHP Fatal error:  require(): Failed opening required '/home/daominhh1/public_html/public/vendor/autoload.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/daominhh1/public_html/public/index.php on line 24
+[27-Nov-2018 08:04:14 UTC] PHP Warning:  require(/home/daominhh1/public_html/public/vendor/autoload.php): failed to open stream: No such file or directory in /home/daominhh1/public_html/public/index.php on line 24
+[27-Nov-2018 08:04:14 UTC] PHP Fatal error:  require(): Failed opening required '/home/daominhh1/public_html/public/vendor/autoload.php' (include_path='.:/opt/alt/php72/usr/share/pear') in /home/daominhh1/public_html/public/index.php on line 24
