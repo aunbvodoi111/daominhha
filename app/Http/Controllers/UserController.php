@@ -180,4 +180,18 @@ class UserController extends Controller
 			'success' => 'success'
         ]);
 	}
+
+	public function postChange_status_user(Request $request){
+		$user = User::find($request->id);
+		if($user->active == 0){
+			$user->active = 1;
+			$user->save();
+		}elseif($user->active == 1){
+			$user->active = 0;
+			$user->save();
+		}
+		return response([
+			'success' => 'success'
+        ]);
+	}
 }

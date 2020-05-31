@@ -39,6 +39,7 @@ Route::get('profile', 'UserController@profile');
 Route::post('addcontact', 'UserController@addcontact');
 Route::post('changePassword', 'UserController@changePassword')->name('changePassword');
 
+Route::post('change_status_user', 'UserController@postChange_status_user');
 Route::post('change_status_link', 'GamesController@postChange_status_link');
 Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
     //
@@ -52,6 +53,17 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::post('sua/{id}', 'TheLoaiController@postSua');
 
         Route::get('xoa/{id}', 'TheLoaiController@getXoa');
+    });
+    Route::group(['prefix' => 'typelink'], function() {
+        Route::get('danhsach', 'TypeLinkController@getDanhSach');
+
+        Route::get('them', 'TypeLinkController@getThem');
+        Route::post('them', 'TypeLinkController@postThem');
+
+        Route::get('sua/{id}', 'TypeLinkController@getSua');
+        Route::post('sua/{id}', 'TypeLinkController@postSua');
+
+        Route::get('xoa/{id}', 'TypeLinkController@getXoa');
     });
 
     Route::group(['prefix' => 'games'], function() {

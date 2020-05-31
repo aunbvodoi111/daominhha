@@ -24,7 +24,7 @@
         <div class="content mt-3">
             <div class="animated fadeIn">
                 <div class="row">
-
+                {{csrf_field()}}
                 <div class="col-md-12">
                     @if (session('thongbao'))
                       <div class="alert alert-success">
@@ -48,6 +48,7 @@
                                 <th>Tên User</th>
                                 <th>Email</th>
                                 <th>Ảnh</th>
+                                <th>Active</th>
                                 <th>Xử lý</th>
                               </tr>
                             </thead>
@@ -58,6 +59,10 @@
                                 <td>{{$items->name}}</td>
                                 <td>{{$items->email}}</td>
                                 <td><img src="{{asset('public/upload/'.$items->hinhanh)}}" width="150px" height="110px"></td>
+                                <td>
+                                    <img src="images/sw.png" class="sw all{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 1) style="display:none;" @endif>
+                                    <img src="images/sww.png" class="sww al{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 0) style="display:none;" @endif>
+                                </td>
                                 <td>
                                   <a href="{{asset('admin/user/sua/'.$items->id)}}"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Sửa</button></a>
                                   <a href="{{asset('admin/user/xoa/'.$items->id)}}" onclick="return xoa()"><button type="button" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;Xóa</button></a>
@@ -73,9 +78,56 @@
                 </div>
             </div><!-- .animated -->
         </div><!-- .content -->
+        <style>
+            img{
+                width: 80px;
+            }
+        </style>
 @endsection
 @section('script')
+  
   <script type="text/javascript">
+    $(document).ready(function(){
+        $('.sw').click(function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.all'+id).hide();
+            $('.al'+id).show();
+            link(id,type)
+        });
+        $('.sww').click(function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.al'+id).hide();
+            $('.all'+id).show();
+            link(id,type)
+        });
+        $('.swt').click(function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.allt'+id).hide();
+            $('.alt'+id).show();
+            link(id,type)
+        });
+        $('.swwt').click(function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.alt'+id).hide();
+            $('.allt'+id).show();
+            link(id,type)
+        });
+    });
+    function link(id,type){
+        var token =$("input[name='_token']").val(); 
+        $.ajax({
+            url:'/change_status_user',
+            type:'post',
+            dataType: 'json',
+            data:{"_token":token,"id":id, "type":type},
+        }).done(function(json) {
+            
+        })
+    }
     function xoa(){
       var test = confirm('Bạn có chắc chắn muốn xóa');
       if(test){
