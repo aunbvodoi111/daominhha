@@ -99,7 +99,7 @@ class HomeController extends Controller
         if($request->ajax()){
             $query = $request->get('tukhoa');
             if(strlen($query) >= 2){
-                $data = GamesModel::where('Name', 'like', "%$query%")->get();
+                $data = GamesModel::where('Name', 'like', "%$query%")->take(20)->get();
                 if(count($data) > 0){
                     return view('Frontend.Pages.searchajax', ['data' => $data]);
                 }               
@@ -139,6 +139,13 @@ class HomeController extends Controller
     
     
     public function download($id){
+        $background = 1;
         return view('Frontend.Pages.download',['id' => $id]);
     }
+
+    public function donate(){
+        $background = 1;
+        return view('Frontend.Pages.donate',compact('background'));
+    }
+    
 }

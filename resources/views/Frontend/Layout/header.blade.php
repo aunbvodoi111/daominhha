@@ -253,13 +253,21 @@
         <div class="nk-contacts-right">
             <ul class="nk-social-links">
                @if(\Auth::user())
-               <p><a href="{{url('aaaaaaaaa')}}">{{\Auth::user()->email}}{{\Auth::user()->id}}</a></p>
+                    <div class="dropdown show">
+                        <a class=" dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Xin chào : {{\Auth::user()->email}}
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                            <a class="dropdown-item" href="{{url('profile')}}">Hồ sơ cá nhân</a>
+                            <a class="dropdown-item" href="{{url('donate')}}">Donate</a>
+                            <a class="dropdown-item" href="#">Thông báo</a>
+                            <a class="dropdown-item" href="{{url('logout')}}">Thoát</a>
+                        </div>
+                    </div>
+                    
                @else
-               <p><a href="{{url('aaaaaaaaa')}}">Đăng nhập</a></p>
+                    <p><a href="{{url('aaaaaaaaa')}}">Đăng nhập</a></p>
                @endif
-              
-
-
             </ul>
         </div>
     </div>
@@ -299,7 +307,7 @@
         <li>
             <a href="{{asset('games-viethoa.html')}}">Game Việt Hóa</a>
         <li>
-			<a href="https://bit.ly/3bIwp7J" target="_blank">Donate</a>
+			<a href="{{asset('donate')}}" target="_blank">Donate</a>
 		</li>
 		<li>
 			<a href="#" data-toggle="modal" data-target="#modalSearch">
@@ -348,3 +356,17 @@
         });	
     });
 </script>
+
+<style>
+    .dropdown-menu {
+        z-index : 10001;
+    }
+    .dropdown a{
+        display: block;
+        font-size: 12px;
+        font-weight: 600;
+        text-transform: uppercase;
+     
+        color: #666;
+    }
+</style>

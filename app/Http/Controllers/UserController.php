@@ -19,6 +19,10 @@ class UserController extends Controller
     	return view('Admin.Users.them');
     }
 
+	public function logout(){
+		Auth::logout();
+  		return redirect('/');
+	}
     public function postThem(Request $request){
     	$this->validate($request, ['Name' => 'required|unique:users,name|min:3|max:100', 'Email' => 'required|email|unique:users,email', 'Password' => 'required|min:6', 'PasswordAgain' => 'required|same:Password', 'HinhAnh' => 'image'],['Name.required' => 'Không được để trống tên user', 'Name.unique' => 'Tên user đã bị trùng', 'Name.min' => 'Tên user phải nhiều hơn 3 ký tự', 'Name.max' => 'Tên user không được quá 100 ký tự', 'Email.required' => 'Email không được để trống', 'Email.email' => 'email không hợp lệ', 'Email.unique' => 'Email đã có người sử dụng', 'Password.required' => 'Password không được để trống', 'Password.min' => 'Password phải lớn hơn 6 ký tự', 'PasswordAgain.required' => 'Phải nhập lại password', 'PasswordAgain.same' => 'Password phải trùng nhau', 'HinhAnh.image' => 'Hình ảnh phải là file ảnh']);
     	$users = new User;
@@ -121,5 +125,47 @@ class UserController extends Controller
 		 });
 		 echo "Email Sent with attachment. Check your inbox.";
 		return redirect(route('aaaaaaaaa'))->with('status', 'Vui lòng xác nhận tài khoản email');
+	}
+	
+	public function profile(){
+        $background = 1;
+        return view('Frontend.Pages.profile',compact('background'));
     }
+	
+	public function changePassword(Request $request){
+		$validatedData = $request->validate([
+            'current-password' => 'required',
+            'new-password' => 'required|string|min:6|confirmed',
+		],
+			[
+				'current-password.required' => 'Mật khẩu hiện tại không được bỏ trống',
+				'new-password.required' => 'Mật khẩu mới không được để trống',
+				'new-password.string' => 'Mật khẩu phải là dạng chuỗi',
+				'new-password.min' => 'Mật khẩu phải có nhiều hơn 6 kí tự',
+				'new-password.confirmed' => 'Mật khẩu xác nhận không khớp',
+			]
+		);
+        if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
+            // The passwords matches
+            return redirect()->back()->with("error","Mật khẩu hiện tại của bạn không khớp với mật khẩu bạn cung cấp. Vui lòng thử lại..");
+        }
+
+        if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+            //Current password and new password are same
+            return redirect()->back()->with("error","Mật khẩu mới không thể giống như mật khẩu hiện tại của bạn. Vui lòng chọn một mật khẩu khác.");
+        }
+
+        
+
+        //Change Password
+        $user = Auth::user();
+        $user->password = bcrypt($request->get('new-password'));
+        $user->save();
+
+        return redirect()->back()->with("success","Password changed successfully !");
+
+	}
+	public function addcontact(){
+		
+	}
 }

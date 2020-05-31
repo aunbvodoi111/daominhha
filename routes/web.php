@@ -33,6 +33,12 @@ Route::post('aaaa', 'UserController@storeCaptchaForm');
 Route::post('checkpasslink', 'HomeController@checkPassLink');
 Route::post('savelinkgame', 'HomeController@savelinkgame');
 Route::get('download/{id}', 'HomeController@download');
+Route::get('donate', 'HomeController@donate');
+Route::get('logout', 'UserController@logout');
+Route::get('profile', 'UserController@profile');
+Route::post('addcontact', 'UserController@addcontact');
+Route::post('changePassword', 'UserController@changePassword')->name('changePassword');
+
 Route::post('change_status_link', 'GamesController@postChange_status_link');
 Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
     //

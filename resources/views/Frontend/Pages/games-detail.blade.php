@@ -103,47 +103,82 @@
         @if ( $id_loaded == 0)
             @foreach ($games->link_list as $key => $items)
                 @if ( $items->list_type->link_ori == 0)
+                    @if ( $items->type == 1)
+                    <h2>{{$items->title}}</h2>
                     <h5>{{$items->link}}:</h5>
                     <h5>{{$items->list_type->link}}:</h5>
-                        @if ( $items->type == 1)
-                            @foreach ($items->list as $key => $prod)
-                                <p>
-                                    @if (  2-count($link_loaded->link_loaded) < 2 && 2-count($link_loaded->link_loaded) > 0)
-                                        <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}" target="_blank">Part {{$key + 1}}</a>
-                                    @elseif(count($link_loaded->link_loaded) == 0)
-                                        <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p>
-                                    @elseif ( 2-count($link_loaded->link_loaded) == 0)
-                                        <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p>
-                                    @endif
-                                </p>
-                            @endforeach
-                        @endif
+                        @foreach ($items->list as $key => $prod)
+                            <p>
+                                @if (  2-count($link_loaded->link_loaded) < 2 && 2-count($link_loaded->link_loaded) > 0)
+                                    <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}" target="_blank">Part {{$key + 1}}</a>
+                                @elseif(count($link_loaded->link_loaded) == 0)
+                                    <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p>
+                                @elseif ( 2-count($link_loaded->link_loaded) == 0)
+                                    <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p>
+                                @endif
+                            </p>
+                        @endforeach
                     @endif
+                @else
+                     @if ( $items->type == 1)
+                        <h2>{{$items->title}}</h2>
+                        <h5>{{$items->link}}:</h5>
+                        <h5>{{$items->list_type->link}}:</h5>
+                        <a href="download"  target="_blank">Hiện tại link đã bị khóa</a>
+                     @endif
+                @endif
             @endforeach
         @else
             @foreach ($games->link_list as $key => $items)
                 @if ( $items->list_type->link_ori == 0)
                     @if ( $items->type == 1)
-                            <h5>{{$items->link}}:</h5>
-                            <h5>{{$items->list_type->link}}:</h5>
-                            <p>
-                                @foreach ($items->list as $key => $prod)
-                                    <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a>
-                                @endforeach
-                            </p>
+                        <h2>{{$items->title}}</h2>
+                        <h5>{{$items->link}}:</h5>
+                        <h5>{{$items->list_type->link}}:</h5>
+                        <p>
+                            @foreach ($items->list as $key => $prod)
+                                <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a>
+                            @endforeach
+                        </p>
                     @endif
                 @endif
             @endforeach
         @endif
         
     @else
-        <h2><a href="/aaaaaaaaa">Đăng nhập để tải game bằng link vip google</a></h2>
+        @foreach ($games->link_list as $key => $items)
+            @if ( $items->list_type->link_ori == 0)
+                @if ( $items->type == 1 && $items->type_link == 1)
+                    <h2>{{$items->title}}</h2>
+                    <h5>{{$items->link}}:</h5>
+                    <h5>{{$items->list_type->link}}:</h5>
+                    <a href=""  target="_blank">Đăng nhập để tải game bằng link googledriver</a>
+                @elseif ( $items->type == 1 && $items->type_link > 1)
+                    <h2>{{$items->title}}</h2>
+                    <h5>{{$items->link}}:</h5>
+                    <h5>{{$items->list_type->link}}:</h5>
+                    <p>
+                        @foreach ($items->list as $key => $prod)
+                            <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a>
+                        @endforeach
+                    </p>
+                @endif
+            @else
+                @if ( $items->type == 1)
+                    <h2>{{$items->title}}</h2>
+                    <h5>{{$items->link}}:</h5>
+                    <h5>{{$items->list_type->link}}:</h5>
+                    <a href="download/"  target="_blank">Hiện tại link đã bị khóa</a>
+                @endif
+            @endif
+        @endforeach
     @endif   
     @foreach ($games->link_list as $key => $items)
         @if ( $items->list_type->status == 0)
             @if ( $items->type == 2)
-                <h5>{{$items->link}}1:</h5>
-                <h5>{{$items->list_type->link}}:</h5>
+                    <h2>{{$items->title}}</h2>
+                    <h5>{{$items->link}}:</h5>
+                    <h5>{{$items->list_type->link}}:</h5>
                 <p>
                     @foreach ($items->list as $key => $prod)
                         <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a>
@@ -395,6 +430,9 @@
             $('.link-re').attr('href','/download/'+ id)
 
         });
+    });
+    $(document).ready(function(){
+        $('iframe').attr('allowfullscreen',0)
     });
     $(document).ready(function(){
         $('.link-re').click(function(){

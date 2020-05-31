@@ -7,17 +7,20 @@
                 <div class="nk-widget">
                     <h4 class="nk-widget-title"><span class="text-main-1">Contact</span> With Us</h4>
                     <div class="nk-widget-content">
-                        <form action="php/ajax-contact-form.php" class="nk-form nk-form-ajax">
-                            <div class="row vertical-gap sm-gap">
-                                <div class="col-md-6">
-                                    <input type="email" class="form-control required" name="email" placeholder="Email *">
+                        <form  class="nk-form nk-form-ajax">
+                        {{ csrf_field() }}
+                            @if(!\Auth::user())
+                                <div class="row vertical-gap sm-gap">
+                                    <div class="col-md-6">
+                                        <input type="email" class="form-control required email" name="email" placeholder="Email *">
+                                    </div>
+                                    <div class="col-md-6">
+                                        <input type="text" class="form-control required name" name="name" placeholder="Name *">
+                                    </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <input type="text" class="form-control required" name="name" placeholder="Name *">
-                                </div>
-                            </div>
+                            @endif
                             <div class="nk-gap"></div>
-                            <textarea class="form-control required" name="message" rows="5" placeholder="Message *"></textarea>
+                                <textarea class="form-control required message" name="message" rows="5" placeholder="Message *"></textarea>
                             <div class="nk-gap-1"></div>
                             <button class="nk-btn nk-btn-rounded nk-btn-color-white">
                                 <span>Send</span>
@@ -219,7 +222,31 @@
 				}
 			})
 		});
-	});	
+    });	
+    
+</script>
+<script>
+    $(document).ready(function(){
+        $('#register').click(function(){
+            var name =$('.name').val();
+            var email =$('.email').val();
+            var message =$('.message').val();
+            var token =$("input[name='_token']").val();  	
+            $.ajax({
+                url:'addcontact',
+                type:'post',
+                dataType: 'json',
+                data:{"_token":token,"name":name,"email":email,'message':message},
+            }).done(function(json) {
+                // console.log(json)
+                if(json.msg == 'success'){
+                    swal(json.msg, json.data, json.msg)
+                }else{
+                    swal(json.msg, json.code.error, json.msg)
+                }
+            })
+        });	
+    });
 </script>
 <!--<div id="fb-root"></div>-->
 <!--    <script>(function(d, s, id) {-->
