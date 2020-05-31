@@ -6,7 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Auth;
-
+use App\Contact;
 class UserController extends Controller
 {
     //
@@ -165,7 +165,19 @@ class UserController extends Controller
         return redirect()->back()->with("success","Password changed successfully !");
 
 	}
-	public function addcontact(){
-		
+	public function addcontact(Request $request){
+		$contact = new Contact;
+		if(Auth::user()){
+			$contact->name = Auth::user()->name;
+			$contact->email = Auth::user()->email;
+		}else{
+			$contact->name = $request->name;
+			$contact->email = $request->email;
+		}
+		$contact->message = $request->message;
+		$contact->save();
+		return response([
+			'success' => 'success'
+        ]);
 	}
 }

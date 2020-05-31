@@ -7,7 +7,7 @@
                 <div class="col-lg-8" style="margin:auto;">
                     <div class="">
                         <p>Ngày gia nhập</p>
-                        <p>{{Auth::user()->created_at}}</p>
+                        <p>{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', Auth::user()->created_at)->format('d-m-Y') }}</p>
                     </div>
                     <div class="">
                         <h4>{{\Auth::user()->name}}</h4>

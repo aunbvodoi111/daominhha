@@ -69,6 +69,21 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::get('xoa/{id}', 'GamesController@getXoa');
     });
 
+    Route::group(['prefix' => 'contact'], function() {
+        Route::get('danhsach', 'ContactController@getDanhSach');
+        Route::get('linkmn', 'ContactController@getLinkmn');
+        
+        
+        Route::get('them', 'ContactController@getThem');
+        Route::get('tagList', 'ContactController@tagList');
+        Route::post('them', 'ContactController@postThem');
+
+        Route::get('sua/{id}', 'ContactController@getSua');
+        Route::post('sua/{id}', 'ContactController@postSua');
+
+        Route::get('xoa/{id}', 'ContactController@getXoa');
+    });
+
     Route::group(['prefix' => 'tag'], function() {
         Route::get('edittag/{idGame}', 'TagController@getEditTag');
 

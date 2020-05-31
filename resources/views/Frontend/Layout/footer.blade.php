@@ -22,7 +22,7 @@
                             <div class="nk-gap"></div>
                                 <textarea class="form-control required message" name="message" rows="5" placeholder="Message *"></textarea>
                             <div class="nk-gap-1"></div>
-                            <button class="nk-btn nk-btn-rounded nk-btn-color-white">
+                            <button class="nk-btn nk-btn-rounded nk-btn-color-white" id="addcontact">
                                 <span>Send</span>
                                 <span class="icon"><i class="ion-paper-airplane"></i></span>
                             </button>
@@ -117,7 +117,22 @@
     </div>
 </div>
 <!-- END: Search Modal -->
+<div class="div-right" style="position:fixed;bottom:18%;right:2%;">
+    <div  id='scrolltop' style="width:40px;height:40px;background:red;border-radius:100%;border: 2px solid #fff;
+    background-color: #333; cursor: pointer;">
+        <i class="fa fa-chevron-up text-center" 
+            style="color:white;   
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            margin:  10px;
+            display: flex;
+            justify-content: center;
+            
+            "></i>
+    </div>
     
+</div>   
 
     
         <!-- START: Login Modal -->
@@ -227,7 +242,7 @@
 </script>
 <script>
     $(document).ready(function(){
-        $('#register').click(function(){
+        $('#addcontact').click(function(){
             var name =$('.name').val();
             var email =$('.email').val();
             var message =$('.message').val();
@@ -238,14 +253,34 @@
                 dataType: 'json',
                 data:{"_token":token,"name":name,"email":email,'message':message},
             }).done(function(json) {
-                // console.log(json)
-                if(json.msg == 'success'){
-                    swal(json.msg, json.data, json.msg)
+                if(json.success == 'success'){
+                    $('.name').val('');
+                    $('.email').val('');
+                    $('.message').val('');
+                    swal(json.success, json.success, json.success)
                 }else{
-                    swal(json.msg, json.code.error, json.msg)
+                    swal(json.error, json.error, json.error)
                 }
             })
         });	
+    });
+    $(document).ready(function() {
+        var scrollTop = $("#scrolltop"); 
+        $(window).scroll(function() {
+        var topPos = $(this).scrollTop();
+        if (topPos > 100) {
+            $(scrollTop).css("opacity", "1");
+
+        } else {
+            $(scrollTop).css("opacity", "0");
+        }
+        }); 
+        $(scrollTop).click(function() {
+        $('html, body').animate({
+            scrollTop: 0
+        }, 600);
+            return false;
+        });
     });
 </script>
 <!--<div id="fb-root"></div>-->
