@@ -38,6 +38,8 @@ Route::get('logout', 'UserController@logout');
 Route::get('profile', 'UserController@profile');
 Route::post('addcontact', 'UserController@addcontact');
 Route::post('changePassword', 'UserController@changePassword')->name('changePassword');
+Route::get('password/reset/{token}', 'UserController@reset')->name('password.reset');
+Route::post('changePasswordFoget/{token}', 'UserController@changePasswordFoget');
 
 Route::post('change_status_user', 'UserController@postChange_status_user');
 Route::post('change_status_link', 'GamesController@postChange_status_link');

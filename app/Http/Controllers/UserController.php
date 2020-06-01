@@ -7,6 +7,9 @@ use App\User;
 use Illuminate\Support\Facades\Hash;
 use Auth;
 use App\Contact;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\ForgetMailable;
+use App\Mail\SendMailable;
 class UserController extends Controller
 {
     //
@@ -165,22 +168,141 @@ class UserController extends Controller
         return redirect()->back()->with("success","Password changed successfully !");
 
 	}
+
+	public function changePasswordFoget(Request $request,$id){
+		$user = User::where('remember_token',$id)->first();
+		
+		// $validatedData = $request->validate([
+        //     'current-password' => 'required',
+        //     'new-password' => 'required|string|min:6|confirmed',
+		// ],
+		// 	[
+		// 		'current-password.required' => 'Mật khẩu hiện tại không được bỏ trống',
+		// 		'new-password.required' => 'Mật khẩu mới không được để trống',
+		// 		'new-password.string' => 'Mật khẩu phải là dạng chuỗi',
+		// 		'new-password.min' => 'Mật khẩu phải có nhiều hơn 6 kí tự',
+		// 		'new-password.confirmed' => 'Mật khẩu xác nhận không khớp',
+		// 	]
+		// );
+        // if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
+        //     // The passwords matches
+        //     return redirect()->back()->with("error","Mật khẩu hiện tại của bạn không khớp với mật khẩu bạn cung cấp. Vui lòng thử lại..");
+        // }
+
+        // if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+        //     //Current password and new password are same
+        //     return redirect()->back()->with("error","Mật khẩu mới không thể giống như mật khẩu hiện tại của bạn. Vui lòng chọn một mật khẩu khác.");
+        // }
+
+        
+
+        //Change Password
+
+        $user->password = bcrypt($request->get('password'));
+        $user->save();
+
+        return redirect()->back()->with("success","Password changed successfully !");
+
+	}
 	public function addcontact(Request $request){
-		$contact = new Contact;
-		if(Auth::user()){
-			$contact->name = Auth::user()->name;
-			$contact->email = Auth::user()->email;
-		}else{
-			$contact->name = $request->name;
-			$contact->email = $request->email;
+
+		// Mail::send('email.verify', 2222222222, function($message) {
+        //     $message->to('phamquycntta@gmail.com', 'anhquy')->subject('Verify your email address');
+		// });
+		// $user = array(
+		// 	'name' => '111111111',
+		// 	'code' => 11111111111,
+		// );
+		// $data = array(
+		// 	'name' => '111111111',
+		// 	'code' => 11111111111,
+		// );
+		// \Mail::send('emails.comfirm', $data, function($message) use ($user) {
+		// 	$message->subject( 'Subject line Here' );
+		// 	$message->to('phamquycntta@gmail.com');
+		// });
+		// return 'Email was sent';
+		// $name = array(
+		// 	'name' => '111111111',
+		// 	'code' => 11111111111,
+		// );
+		// Mail::to('phamquycntta@gmail.com')->send(new SendMailable($name));
+		
+		// return 'Email was sent';
+		// $contact = new Contact;
+		// if(Auth::user()){
+		// 	$contact->name = Auth::user()->name;
+		// 	$contact->email = Auth::user()->email;
+		// }else{
+		// 	$contact->name = $request->name;
+		// 	$contact->email = $request->email;
+		// }
+		// $contact->message = $request->message;
+		// $contact->save();
+		// return response([
+		// 	'success' => 'success'
+		// ]);
+		
+		$user = User::where('email',$request->email)->first();
+        if($user) {
+            $newData = [
+                'email' => $user->email,
+                'token' => str_random(64),
+			];
+			$user->email = $request->email;
+			$user->remember_token = $newData['token'];
+			$user->save();
+			
+			// if($data && $user) {
+			// 	$user->data = $data;
+			// 	\MyLog::do()->add('info-pwd-reset');
+			// 	\Mail::to($user->email)->send(new UserResetPassword($user));
+				 
+			// }
+				
+			$user->data = $newData;
+			Mail::to('phamquycntta@gmail.com')->send(new ForgetMailable($user));
+			dd('sdaaaaa');
+			event('user.password', [$newData, $user]);
+			
+            return redirect()->back()->with('status', 'Email lấy lại mật khẩu đã được gửi đi, vui lòng kiểm tra Inbox/Spam/Bulk và làm theo hướng dẫn');
 		}
-		$contact->message = $request->message;
-		$contact->save();
-		return response([
-			'success' => 'success'
-        ]);
+		
+        return back()->withInput()->withErrors(
+            ['email' => 'Không tìm thấy thông tin']
+        );
 	}
 
+
+	public function reset($token)
+    {	$background = 1;
+		return view('Frontend.Pages.resetPass',compact('token','background'));
+    }
+
+	public function sendResetLinkEmail(Request $request)
+    {
+        $this->validateEmail($request);
+
+        $user = User::whereEmail($request->email)->first();
+        if($user) {
+            $newData = [
+                'email' => $user->email,
+                'token' => str_random(64),
+                'created_at' => time()
+            ];
+			$table = config('auth.passwords.users.table');
+			dd(1);
+            \DB::table($table)->whereEmail($user->email)->delete();
+            \DB::table($table)->insert($newData);
+            event('user.password', [$newData, $user]);
+
+            return redirect()->back()->with('status', 'Email lấy lại mật khẩu đã được gửi đi, vui lòng kiểm tra Inbox/Spam/Bulk và làm theo hướng dẫn');
+        }
+        return back()->withInput()->withErrors(
+            ['email' => 'Không tìm thấy thông tin']
+        );
+	}
+	
 	public function postChange_status_user(Request $request){
 		$user = User::find($request->id);
 		if($user->active == 0){
