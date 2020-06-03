@@ -41,24 +41,28 @@
         <div class="nk-gap-3"></div>
     </div>
 
-    <div class="nk-copyright">
-        <div class="container">
-            <div class="nk-copyright-left">
-                Copyright &copy; 2019 <a href="https://themeforest.net/user/_nk?ref=_nK" target="_blank">Đào Minh Hà</a>
+   
+        <div class="container nk-copyright" style="padding: 25px 0px 25px 10px">
+            <div class="row">
+                <div class="col-6">
+                    Copyright &copy; 2019 <a href="https://themeforest.net/user/_nk?ref=_nK" target="_blank">Đào Minh Hà</a>
+                </div>
+                <div class="col-3">
+                    <a href="//www.dmca.com/Protection/Status.aspx?ID=72b77a38-4faa-485b-9d88-91581f221658" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120l.png?ID=72b77a38-4faa-485b-9d88-91581f221658"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
+                </div>
+                <div class="col-3">
+                    <ul class="nk-social-links-2">
+                        <li><a class="nk-social-rss" href="{{asset('/')}}" target="_blank"><span class="fa fa-rss"></span></a></li>
+                        <li><a class="nk-social-twitch" href="{{asset('/')}}" target="_blank"><span class="fab fa-twitch"></span></a></li>
+                        <li><a class="nk-social-steam" href="{{asset('/')}}" target="_blank"><span class="fab fa-steam"></span></a></li>
+                        <li><a class="nk-social-facebook" href="https://www.facebook.com/taigameoffline/?modal=admin_todo_tour" target="_blank"><span class="fab fa-facebook"></span></a></li>
+                        <li><a class="nk-social-google-plus" href="https://www.google.com/search?ei=VcxGXdfjG9XbhwPWgbL4Ag&q=daominhha&oq=daominhha&gs_l=psy-ab.3..0.2844979.2845990..2846191...0.0..0.176.865.7j2......0....1..gws-wiz.......0i131i67j0i131j0i67j0i10j0i10i30j0i30j38.iKlDvoDG88Q&ved=0ahUKEwiX4ovbmOnjAhXV7WEKHdaADC8Q4dUDCAo&uact=5" target="_blank"><span class="fab fa-google-plus"></span></a></li>
+                        <li><a class="nk-social-twitter" href="{{asset('/')}}" target="_blank"><span class="fab fa-twitter"></span></a></li>
+                        <li><a class="nk-social-pinterest" href="{{asset('/')}}" target="_blank"><span class="fab fa-pinterest-p"></span></a></li>
+                    </ul>
+                </div>
             </div>
-            <a href="//www.dmca.com/Protection/Status.aspx?ID=72b77a38-4faa-485b-9d88-91581f221658" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120l.png?ID=72b77a38-4faa-485b-9d88-91581f221658"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
-            <div class="nk-copyright-right">
-                <ul class="nk-social-links-2">
-                    <li><a class="nk-social-rss" href="{{asset('/')}}" target="_blank"><span class="fa fa-rss"></span></a></li>
-                    <li><a class="nk-social-twitch" href="{{asset('/')}}" target="_blank"><span class="fab fa-twitch"></span></a></li>
-                    <li><a class="nk-social-steam" href="{{asset('/')}}" target="_blank"><span class="fab fa-steam"></span></a></li>
-                    <li><a class="nk-social-facebook" href="https://www.facebook.com/taigameoffline/?modal=admin_todo_tour" target="_blank"><span class="fab fa-facebook"></span></a></li>
-                    <li><a class="nk-social-google-plus" href="https://www.google.com/search?ei=VcxGXdfjG9XbhwPWgbL4Ag&q=daominhha&oq=daominhha&gs_l=psy-ab.3..0.2844979.2845990..2846191...0.0..0.176.865.7j2......0....1..gws-wiz.......0i131i67j0i131j0i67j0i10j0i10i30j0i30j38.iKlDvoDG88Q&ved=0ahUKEwiX4ovbmOnjAhXV7WEKHdaADC8Q4dUDCAo&uact=5" target="_blank"><span class="fab fa-google-plus"></span></a></li>
-                    <li><a class="nk-social-twitter" href="{{asset('/')}}" target="_blank"><span class="fab fa-twitter"></span></a></li>
-                    <li><a class="nk-social-pinterest" href="{{asset('/')}}" target="_blank"><span class="fab fa-pinterest-p"></span></a></li>
-                </ul>
-            </div>
-        </div>
+      
     </div>
 </footer>
 <!-- END: Footer -->
@@ -162,6 +166,16 @@
 		text-decoration: none;
     	color: #7f8b92;
 	}
+    .page-item.active .page-link {
+        z-index: 1;
+        color: #fff;
+        background: black;
+        border: white 1px solid;
+    }
+    .page-link {
+        margin-left: 5px;
+        color: black;
+    }
 </style>
 <script src="assets/vendor/object-fit-images/dist/ofi.min.js"></script>
 

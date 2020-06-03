@@ -47,7 +47,8 @@
                                 <th>id</th>
                                 <th>Tên User</th>
                                 <th>Email</th>
-                                <th>Ảnh</th>
+                                <th>Link Facebook</th>
+                                <th>Nguyên nhân khóa</th>
                                 <th>Active</th>
                                 <th>Xử lý</th>
                               </tr>
@@ -58,7 +59,8 @@
                                 <td>{{$items->id}}</td>
                                 <td>{{$items->name}}</td>
                                 <td>{{$items->email}}</td>
-                                <td><img src="{{asset('public/upload/'.$items->hinhanh)}}" width="150px" height="110px"></td>
+                                <td>{{$items->facebook}}</td>
+                                <td>{{$items->reason}}</td>
                                 <td>
                                     <img src="images/sw.png" class="sw all{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 1) style="display:none;" @endif>
                                     <img src="images/sww.png" class="sww al{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 0) style="display:none;" @endif>

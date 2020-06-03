@@ -38,9 +38,11 @@ Route::get('logout', 'UserController@logout');
 Route::get('profile', 'UserController@profile');
 Route::post('addcontact', 'UserController@addcontact');
 Route::post('changePassword', 'UserController@changePassword')->name('changePassword');
-Route::get('password/reset/{token}', 'UserController@reset')->name('password.reset');
+Route::get('password/reset/{token}', 'UserController@reset')->name('password.reset'); 
 Route::post('changePasswordFoget/{token}', 'UserController@changePasswordFoget');
-
+Route::get('register/verify/{token}', 'UserController@comfirmEmailRes');
+Route::get('ForgotPassword', 'UserController@ForgotPassword');
+Route::post('ForgotPassword', 'UserController@postEmailForgotPassword');
 Route::post('change_status_user', 'UserController@postChange_status_user');
 Route::post('change_status_link', 'GamesController@postChange_status_link');
 Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
@@ -66,6 +68,18 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::post('sua/{id}', 'TypeLinkController@postSua');
 
         Route::get('xoa/{id}', 'TypeLinkController@getXoa');
+    });
+
+    Route::group(['prefix' => 'tonghop'], function() {
+        Route::get('danhsach', 'TongHopController@getDanhSach');
+
+        Route::get('them', 'TongHopController@getThem');
+        Route::post('them', 'TongHopController@postThem');
+
+        Route::get('sua/{id}', 'TongHopController@getSua');
+        Route::post('sua/{id}', 'TongHopController@postSua');
+
+        Route::get('xoa/{id}', 'TongHopController@getXoa');
     });
 
     Route::group(['prefix' => 'games'], function() {

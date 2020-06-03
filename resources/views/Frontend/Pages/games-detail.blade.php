@@ -109,7 +109,7 @@
                     <h5>{{$items->list_type->link}}:</h5>
                         @foreach ($items->list as $key => $prod)
                             <p>
-                                @if (  2-count($link_loaded->link_loaded) < 2 && 2-count($link_loaded->link_loaded) > 0)
+                                @if (  ($totalGame->sogame)-count($link_loaded->link_loaded) < ($totalGame->sogame) && ($totalGame->sogame)-count($link_loaded->link_loaded) > 0)
                                     <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}" target="_blank">Part {{$key + 1}}</a>
                                 @elseif(count($link_loaded->link_loaded) == 0)
                                     <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p>
@@ -200,10 +200,10 @@
         <form id="demoForm" action="{{url('store-captcha-form')}}">
         @csrf
         @if ( \Auth::user())
-            @if (2-count($link_loaded->link_loaded) < 2 && 2-count($link_loaded->link_loaded) > 0 )
+            @if (($totalGame->sogame)-count($link_loaded->link_loaded) < ($totalGame->sogame) && ($totalGame->sogame)-count($link_loaded->link_loaded) > 0 )
             <div class="form-group">
                 <label for="recipient-name" class="col-form-label">Hôm này bạn đã tải được {{count($link_loaded->link_loaded)}} game. Mỗi ngày chỉ được tải 
-                2 game bằng link vip bạn còn {{2-count($link_loaded->link_loaded)}} được tải 
+                {{$totalGame->sogame}} game bằng link vip bạn còn {{($totalGame->sogame)-count($link_loaded->link_loaded)}} được tải 
                 :</label>
                 <p>Danh sách game bạn đã tải:</p>
                     @foreach ($link_loaded->link_loaded as $items)
@@ -214,15 +214,15 @@
             </div>
             @elseif(count($link_loaded->link_loaded) == 0)
                 <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Mỗi ngày một user chỉ được tải 2 game duy nhất có link googledriver
+                    <label for="recipient-name" class="col-form-label">Mỗi ngày một user chỉ được tải {{$totalGame->sogame}} game duy nhất có link googledriver
                     :</label>
                     <p>Bạn có muốn tải game:</p>
                     <p><a href="{{asset('games-detail/'.$games->TenKhongDau.'/'.$games->id.'.html')}}">{{$games->Name}}</a></p>
                 </div>
-            @elseif (2-count($link_loaded->link_loaded) == 0)
+            @elseif (($totalGame->sogame)-count($link_loaded->link_loaded) == 0)
                 <div class="form-group">
                     <label for="recipient-name" class="col-form-label">Hôm này bạn đã tải được {{count($link_loaded->link_loaded)}} game. Mỗi ngày chỉ được tải 
-                    2 game bằng link vip bạn còn {{2-count($link_loaded->link_loaded)}} được tải 
+                    {{$totalGame->sogame}} game bằng link vip bạn còn {{2-count($link_loaded->link_loaded)}} được tải 
                     :</label>
                     <p>Bạn hiện tại dã hết lượt tải xin cảm ơn</p>
                     <p>Danh sách game bạn đã tải trong hôm nay:</p>

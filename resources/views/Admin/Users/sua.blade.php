@@ -43,6 +43,7 @@
                             <div class="card-header">
                                 <strong>Sửa User</strong>
                             </div>
+                            div 
                             <div class="card-body card-block">
                                 <form action="{{asset('admin/user/sua/'.$users->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                                     {{csrf_field()}}

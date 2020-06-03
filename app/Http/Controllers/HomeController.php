@@ -10,7 +10,7 @@ use App\User;
 use App\Link_List;
 use App\Linkhide;
 use DB;
-
+use App\totalGame;
 class HomeController extends Controller
 {
     public function getHome(){
@@ -44,8 +44,8 @@ class HomeController extends Controller
                 }
             }
         }
-        
-    	return view('Frontend.Pages.games-detail', ['games' => $games, 'background' => $background, 'gamescungseries' => $gamescungseries, 'gamesrandom' => $gamesrandom, 'seotitle' => $seotitle, 'gamesxemnhieu' => $gamesxemnhieu, 'link_loaded' => $link_loaded, 'id_loaded' => $id_loaded]);
+        $totalGame = totalGame::find(1);
+    	return view('Frontend.Pages.games-detail', ['totalGame'=>$totalGame,'games' => $games, 'background' => $background, 'gamescungseries' => $gamescungseries, 'gamesrandom' => $gamesrandom, 'seotitle' => $seotitle, 'gamesxemnhieu' => $gamesxemnhieu, 'link_loaded' => $link_loaded, 'id_loaded' => $id_loaded]);
     }
 
     public function getGamesTheLoai($TenKhongDau, $idTheLoai){

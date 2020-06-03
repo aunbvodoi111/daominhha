@@ -10,6 +10,7 @@ use App\Contact;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetMailable;
 use App\Mail\SendMailable;
+use Validator;
 class UserController extends Controller
 {
     //
@@ -68,16 +69,28 @@ class UserController extends Controller
         return view('Admin.login');
     }
 
-    public function postLogin(Request $request){
-        $this->validate($request, ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
-        if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-            return redirect('admin/games/danhsach');
-        }
-        else {
-            return redirect('admin/login')->with('thongbao', 'Email hoặc mật khẩu không đúng');
-        }
-    }
+    // public function postLogin(Request $request){
+    //     $this->validate($request, ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
+    //     if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+    //         return redirect('admin/games/danhsach');
+    //     }
+    //     else {
+    //         return redirect('admin/login')->with('thongbao', 'Email hoặc mật khẩu không đúng');
+    //     }
+    // }
 
+	public function postLogin(Request $request){
+		$validator = Validator::make($request->all(), ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
+	
+			if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+				return response()->json(['success'=>'Added new records.']);
+			}else{
+				return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+			}
+		
+            return response()->json(['error'=>$validator->errors()->all()]);
+        
+    }
     public function getInfo(){
         $users = Auth::user();
         return view('Admin.Users.info', ['users' => $users]);
@@ -91,48 +104,101 @@ class UserController extends Controller
 		$background = 2;
         return view('Frontend.Pages.auth',compact('background'));
 	}
+	
+	public function comfirmEmailRes($id){
+		$user = User::where('remember_token',$id)->first();
+		$background = 2;
+		if($user){
+			$user->remember_token = '';
+			$user->save();
+			return view('Frontend.Pages.comfirmEmailUser', ['user' => $user,'background' => $background ]);
+		}
+        
+	}
 	public function storeCaptchaForm(Request $request)
     {
 		// dd(\Request::ip());
-		$this->validate($request, 
+		$validator = Validator::make($request->all(), 
 		[
 			'email' => 'required|unique:users,email', 
 			'name' => 'required',
 			'password' => 'required|alpha_dash', 
 			'password_confirmed' => 'required', 
-			'g-recaptcha-response' => 'required|captcha',
+			'g_recaptcha_response' => 'required',
 			], [
 				'name.required' => 'Tên game không được để trống', 
-				'g-recaptcha-response.required' => 'Tên game không được để trống', 
-				'password' => 'required|confirmed|min:6',
-				'password.alpha_dash' => 'Mật khẩu không được có khoảng cách'
+				'g_recaptcha_response.required' => 'Bạn phải tích vào capcha', 
+				'email.unique' => 'Email đã được sử dụng',
+				'email.required' => 'Vui lòng nhập email',
+				'password.alpha_dash' => 'Mật khẩu không được có khoảng cách',
+				'password_confirmed.required' => 'Bạn chưa nhập mật khẩu',
+				'password.confirmed' => 'Hai mật khẩu không trùng khớp nhau',
+				'password.min' => 'Mật khẩu nhiều hơn 6 kí tự',
+				'password.required' => 'Bạn chưa nhập mật khẩu'
 			]
 		);
+		if ($validator->passes()) {
+			$user = new User;
+			$user->email = $request->email;
+			$user->name = $request->name;
+			$user->password = Hash::make($request->password);
+			$user->active = 0;
+			
+			$name = array(
+				'name' => '111111111',
+				'code' => str_random(64),
+			);
+			$user->remember_token = $name['code'];
+			$user->save();
+			Mail::to('phamquycntta@gmail.com')->send(new SendMailable($name));
+			// return 'Email was sent';
+			// echo "Email Sent with attachment. Check your inbox.";
+			// return redirect(route('aaaaaaaaa'))->with('status', 'Vui lòng xác nhận tài khoản email');
+			return response()->json(['success'=>'Added new records.']);
+        }
+
+
+    	return response()->json(['error'=>$validator->errors()->all()]);
 		
-		$user = new User;
-		$user->email = $request->email;
-		$user->name = $request->name;
-		$user->password = Hash::make($request->password);
-		$user->active = 0;
-		$user->save();
-		$data =[
-			'anhquy' => 'asadsa',
-			'anhquy222' => 'asadsa',
-		];
-		\Mail::send('Frontend.mail', $data, function($message) {
-			$message->to('abc@gmail.com', 'Tutorials Point')->subject
-			   ('Laravel Testing Mail with Attachment');
-			$message->attach('C:\laravel-master\laravel\public\uploads\image.png');
-			$message->attach('C:\laravel-master\laravel\public\uploads\test.txt');
-			$message->from('xyz@gmail.com','Virat Gandhi');
-		 });
-		 echo "Email Sent with attachment. Check your inbox.";
-		return redirect(route('aaaaaaaaa'))->with('status', 'Vui lòng xác nhận tài khoản email');
 	}
 	
 	public function profile(){
         $background = 1;
         return view('Frontend.Pages.profile',compact('background'));
+	}
+	public function ForgotPassword(){
+        $background = 1;
+        return view('Frontend.Pages.mailFogetPass',compact('background'));
+	}
+	public function postEmailForgotPassword(Request $request){
+        $user = User::where('email',$request->email)->first();
+        if($user) {
+            $newData = [
+                'email' => $user->email,
+                'token' => str_random(64),
+			];
+			$user->email = $request->email;
+			$user->remember_token = $newData['token'];
+			$user->save();
+			
+			// if($data && $user) {
+			// 	$user->data = $data;
+			// 	\MyLog::do()->add('info-pwd-reset');
+			// 	\Mail::to($user->email)->send(new UserResetPassword($user));
+				 
+			// }
+				
+			$user->data = $newData;
+			Mail::to('phamquycntta@gmail.com')->send(new ForgetMailable($user));
+			// dd('sdaaaaa');
+			// event('user.password', [$newData, $user]);
+			
+            return redirect()->back()->with('status', 'Email lấy lại mật khẩu đã được gửi đi, vui lòng kiểm tra Inbox/Spam/Bulk và làm theo hướng dẫn');
+		}
+		
+        return back()->withInput()->withErrors(
+            ['email' => 'Không tìm thấy thông tin']
+        );
     }
 	
 	public function changePassword(Request $request){
@@ -157,10 +223,6 @@ class UserController extends Controller
             //Current password and new password are same
             return redirect()->back()->with("error","Mật khẩu mới không thể giống như mật khẩu hiện tại của bạn. Vui lòng chọn một mật khẩu khác.");
         }
-
-        
-
-        //Change Password
         $user = Auth::user();
         $user->password = bcrypt($request->get('new-password'));
         $user->save();
@@ -172,35 +234,30 @@ class UserController extends Controller
 	public function changePasswordFoget(Request $request,$id){
 		$user = User::where('remember_token',$id)->first();
 		
-		// $validatedData = $request->validate([
-        //     'current-password' => 'required',
-        //     'new-password' => 'required|string|min:6|confirmed',
-		// ],
-		// 	[
-		// 		'current-password.required' => 'Mật khẩu hiện tại không được bỏ trống',
-		// 		'new-password.required' => 'Mật khẩu mới không được để trống',
-		// 		'new-password.string' => 'Mật khẩu phải là dạng chuỗi',
-		// 		'new-password.min' => 'Mật khẩu phải có nhiều hơn 6 kí tự',
-		// 		'new-password.confirmed' => 'Mật khẩu xác nhận không khớp',
-		// 	]
-		// );
-        // if (!(Hash::check($request->get('current-password'), Auth::user()->password))) {
-        //     // The passwords matches
-        //     return redirect()->back()->with("error","Mật khẩu hiện tại của bạn không khớp với mật khẩu bạn cung cấp. Vui lòng thử lại..");
-        // }
+		$validatedData = $request->validate([
+            'password' => 'required|min:6',
+            'new-password' => 'required|string|min:6|confirmed',
+		],
+			[
+				'password.required' => 'Mật khẩu hiện tại không được bỏ trống',
+				'password.min' => 'Mật khẩu phải có nhiều hơn 6 kí tự',
+				'new-password.required' => 'Mật khẩu mới không được để trống',
+				'new-password.string' => 'Mật khẩu phải là dạng chuỗi',
+				'new-password.min' => 'Mật khẩu phải có nhiều hơn 6 kí tự',
+				'new-password.confirmed' => 'Mật khẩu xác nhận không khớp',
+			]
+		);
 
-        // if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
-        //     //Current password and new password are same
-        //     return redirect()->back()->with("error","Mật khẩu mới không thể giống như mật khẩu hiện tại của bạn. Vui lòng chọn một mật khẩu khác.");
-        // }
-
-        
+        if(strcmp($request->get('current-password'), $request->get('new-password')) == 0){
+            //Current password and new password are same
+            return redirect()->back()->with("error","Mật khẩu mới không thể giống như mật khẩu hiện tại của bạn. Vui lòng chọn một mật khẩu khác.");
+        }
 
         //Change Password
 
-        $user->password = bcrypt($request->get('password'));
+		$user->password = bcrypt($request->get('password'));
+		$user->remember_token = '';
         $user->save();
-
         return redirect()->back()->with("success","Password changed successfully !");
 
 	}
@@ -229,48 +286,48 @@ class UserController extends Controller
 		// Mail::to('phamquycntta@gmail.com')->send(new SendMailable($name));
 		
 		// return 'Email was sent';
-		// $contact = new Contact;
-		// if(Auth::user()){
-		// 	$contact->name = Auth::user()->name;
-		// 	$contact->email = Auth::user()->email;
-		// }else{
-		// 	$contact->name = $request->name;
-		// 	$contact->email = $request->email;
-		// }
-		// $contact->message = $request->message;
-		// $contact->save();
-		// return response([
-		// 	'success' => 'success'
-		// ]);
-		
-		$user = User::where('email',$request->email)->first();
-        if($user) {
-            $newData = [
-                'email' => $user->email,
-                'token' => str_random(64),
-			];
-			$user->email = $request->email;
-			$user->remember_token = $newData['token'];
-			$user->save();
-			
-			// if($data && $user) {
-			// 	$user->data = $data;
-			// 	\MyLog::do()->add('info-pwd-reset');
-			// 	\Mail::to($user->email)->send(new UserResetPassword($user));
-				 
-			// }
-				
-			$user->data = $newData;
-			Mail::to('phamquycntta@gmail.com')->send(new ForgetMailable($user));
-			dd('sdaaaaa');
-			event('user.password', [$newData, $user]);
-			
-            return redirect()->back()->with('status', 'Email lấy lại mật khẩu đã được gửi đi, vui lòng kiểm tra Inbox/Spam/Bulk và làm theo hướng dẫn');
+		$contact = new Contact;
+		if(Auth::user()){
+			$contact->name = Auth::user()->name;
+			$contact->email = Auth::user()->email;
+		}else{
+			$contact->name = $request->name;
+			$contact->email = $request->email;
 		}
+		$contact->message = $request->message;
+		$contact->save();
+		return response([
+			'success' => 'success'
+		]);
 		
-        return back()->withInput()->withErrors(
-            ['email' => 'Không tìm thấy thông tin']
-        );
+		// $user = User::where('email',$request->email)->first();
+        // if($user) {
+        //     $newData = [
+        //         'email' => $user->email,
+        //         'token' => str_random(64),
+		// 	];
+		// 	$user->email = $request->email;
+		// 	$user->remember_token = $newData['token'];
+		// 	$user->save();
+			
+		// 	// if($data && $user) {
+		// 	// 	$user->data = $data;
+		// 	// 	\MyLog::do()->add('info-pwd-reset');
+		// 	// 	\Mail::to($user->email)->send(new UserResetPassword($user));
+				 
+		// 	// }
+				
+		// 	$user->data = $newData;
+		// 	Mail::to('phamquycntta@gmail.com')->send(new ForgetMailable($user));
+		// 	// dd('sdaaaaa');
+		// 	// event('user.password', [$newData, $user]);
+			
+        //     return redirect()->back()->with('status', 'Email lấy lại mật khẩu đã được gửi đi, vui lòng kiểm tra Inbox/Spam/Bulk và làm theo hướng dẫn');
+		// }
+		
+        // return back()->withInput()->withErrors(
+        //     ['email' => 'Không tìm thấy thông tin']
+        // );
 	}
 
 
@@ -303,6 +360,7 @@ class UserController extends Controller
         );
 	}
 	
+
 	public function postChange_status_user(Request $request){
 		$user = User::find($request->id);
 		if($user->active == 0){

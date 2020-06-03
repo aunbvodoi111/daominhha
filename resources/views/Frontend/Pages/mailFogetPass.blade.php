@@ -2,7 +2,7 @@
 @section('content')
 <div class="container " >
     <div class="modal-header">
-        <h5 class="modal-title title-rg" id="exampleModalLabel">Thay đổi mật khẩu</h5>
+        <h5 class="modal-title title-rg" id="exampleModalLabel">lẤY LẠI MẬT KHẨU</h5>
     </div>
     <div class="modal-body register">
         @if (session('thongbao'))
@@ -17,30 +17,23 @@
                 @endforeach
             </div>  
         @endif
-        <form id="demoForm" action="/changePasswordFoget/{{$token}}" method="post">
+        <form id="demoForm" action="/ForgotPassword/" method="post">
             @csrf
             <div class="form-group">
-                <label for="recipient-name" class="col-form-label">MẬT KHẨU:</label>
-                <input type="password" class="form-control password" id="recipient-name" id="password" type="password" name="password">
+                <label for="recipient-name" class="col-form-label">NHẬP EMAIL MÀ BẠN ĐĂNG KÍ:</label>
+                <input type="email" class="form-control name" id="recipient-name" name="email">
             </div>
             <div class="form-group">
-                <label for="recipient-name" class="col-form-label">NHẬP LẠI MẬT KHẨU:</label>
-                <input type="password" class="form-control name" id="recipient-name" name="password_confirmed">
-            </div>
-            <div class="form-group">
-            <label for="captcha">Captcha</label>
                 {!! NoCaptcha::renderJs() !!}
                 {!! NoCaptcha::display() !!}
             <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
             </div>
-        
         </div>
         <div class="modal-footer">
-            <input type="submit" value="Register" id="Gửi"/>
+            <input type="submit" value="Gửi" id="register"/>
         </div>
         </div>
         </form>
     </div>
 </div>
-
 @endsection
