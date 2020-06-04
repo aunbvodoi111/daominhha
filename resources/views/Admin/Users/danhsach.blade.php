@@ -62,8 +62,8 @@
                                 <td>{{$items->facebook}}</td>
                                 <td>{{$items->reason}}</td>
                                 <td>
-                                    <img src="images/sw.png" class="sw all{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 1) style="display:none;" @endif>
-                                    <img src="images/sww.png" class="sww al{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 0) style="display:none;" @endif>
+                                    <img src="images/sw.png" class="sw all{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 0) style="display:none;" @endif>
+                                    <img src="images/sww.png" class="sww al{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 1) style="display:none;" @endif>
                                 </td>
                                 <td>
                                   <a href="{{asset('admin/user/sua/'.$items->id)}}"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Sửa</button></a>
@@ -89,36 +89,35 @@
 @section('script')
   
   <script type="text/javascript">
-    $(document).ready(function(){
-        $('.sw').click(function() {
+      $(document).on('click', '.sw', function() {
             var id = $(this).attr('attr_id');
             var type = $(this).attr('attr_type');
             $('.all'+id).hide();
             $('.al'+id).show();
             link(id,type)
         });
-        $('.sww').click(function() {
+        $(document).on('click', '.sww', function() {
             var id = $(this).attr('attr_id');
             var type = $(this).attr('attr_type');
             $('.al'+id).hide();
             $('.all'+id).show();
             link(id,type)
         });
-        $('.swt').click(function() {
+        $(document).on('click', '.swt', function() { 
             var id = $(this).attr('attr_id');
             var type = $(this).attr('attr_type');
             $('.allt'+id).hide();
             $('.alt'+id).show();
             link(id,type)
         });
-        $('.swwt').click(function() {
+        $(document).on('click', '.swwt', function() { 
             var id = $(this).attr('attr_id');
             var type = $(this).attr('attr_type');
             $('.alt'+id).hide();
             $('.allt'+id).show();
             link(id,type)
         });
-    });
+
     function link(id,type){
         var token =$("input[name='_token']").val(); 
         $.ajax({

@@ -19,7 +19,9 @@ class TongHopController extends Controller
     public function postSua(Request $request, $id){
     	$this->validate($request, ['sogame' => 'required'], ['sogame.required' => 'Số game không được bỏ trống']);
     	$totalGame = totalGame::find(1);
-    	$totalGame->sogame = $request->sogame;
+		$totalGame->sogame = $request->sogame;
+    	$totalGame->password = $request->password;
+		$totalGame->copy = $request->copy;
     	$totalGame->save();
     	return redirect('admin/tonghop/sua/'.$id)->with('thongbao', 'Sửa thành công');
     }

@@ -152,7 +152,7 @@
                     <h2>{{$items->title}}</h2>
                     <h5>{{$items->link}}:</h5>
                     <h5>{{$items->list_type->link}}:</h5>
-                    <a href=""  target="_blank">Đăng nhập để tải game bằng link googledriver</a>
+                    <a href="aaaaaaaaa"  target="_blank">Đăng nhập để tải game bằng link googledriver</a>
                 @elseif ( $items->type == 1 && $items->type_link > 1)
                     <h2>{{$items->title}}</h2>
                     <h5>{{$items->link}}:</h5>

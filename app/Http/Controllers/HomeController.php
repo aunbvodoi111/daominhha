@@ -11,8 +11,14 @@ use App\Link_List;
 use App\Linkhide;
 use DB;
 use App\totalGame;
+use View;
 class HomeController extends Controller
 {
+    public function __construct(){
+        $totalGame = totalGame::find(1);
+        View::share('totalGame', $totalGame);
+    }
+
     public function getHome(){
         $games = GamesModel::select('id', 'Name', 'AnhChinh', 'Avatar', 'TenKhongDau', 'TheLoai', 'SoLuotXem', 'MoTa', 'AnhMini', 'created_at')->orderBy('CurrentTime', 'desc')->where('id','!=',997)->where('id','!=',8)->where('id','!=',40)->where('id','!=',80)->take(20)->get();
         $gamehot = GamesModel::select('id', 'Name', 'Avatar', 'TenKhongDau', 'MoTa', 'AnhMini', 'created_at')->where('id',601)->orwhere('id',2151)->orwhere('id',2172)->orwhere('id',2239)->orwhere('id',13)->orderBy('id','desc')->get();
@@ -109,8 +115,9 @@ class HomeController extends Controller
 
     public function link($id){
         $background = 1;
+        $totalGame = totalGame::find(1);
         $data = Link_List::find($id);
-        return view('Frontend.Pages.linkgoogle',compact('background','data'));
+        return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
     }
     
     public function checkPassLink(Request $request){
@@ -119,9 +126,10 @@ class HomeController extends Controller
         $validator = \Validator::make($request->all(), [
             'code' => 'required',
         ]);
-        if($data->code == $request['code']){
+        $totalGame = totalGame::find(1);
+        if($totalGame->password == $request['code']){
             return response()->json(['susscess'=>$data]); 
-        }else if($data->code != $request['code']){
+        }else if($totalGame->password != $request['code']){
             return response()->json(['errCode'=>'errCode']); 
         }else{
             return response()->json(['error'=>$validator->errors()->all()]);

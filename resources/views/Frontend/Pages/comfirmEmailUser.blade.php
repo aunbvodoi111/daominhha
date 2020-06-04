@@ -8,7 +8,7 @@
                     <div class="page-title ta-c fw-rbm fs-30 fc-black">Kích hoạt tài khoản</div>
                     <div class="fs-14 fc-black" align="center">
                         <p class="fw-ob">Chúc mừng bạn đã kích hoạt tài khoản thành công.</p>
-                        <p>Bạn đã có thể sử dụng email <span class="fw-ob">{{ $user->email }}</span> để <a href="#" data-toggle="modal" data-target="#login" class="fw-ob read-more">Đăng nhập</a> vào hệ thống ngay bây giờ.</p>
+                        <p>Bạn đã có thể sử dụng email <span class="fw-ob">{{ $user->email }}</span> để <a href="/aaaaaaaaa">Đăng nhập</a> vào hệ thống ngay bây giờ.</p>
                         <p>Kích hoạt tài khoản vui lòng inbox fanpage <a href="https://www.facebook.com/DaominhhaTaiGameMienPhi">Daominhha.com - Tải Game Miễn Phí</a></p>
                     </div>
                 </div>

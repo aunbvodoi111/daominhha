@@ -14,7 +14,7 @@
                 @endforeach
             </div>  
         @endif
-        <h3>Mật khẩu: <span style="text-transform: none;">{{$data->code}}</span></h3>
+        <h3>Mật khẩu: <span style="text-transform: none;">{{$totalGame->password}}</span></h3>
         <div class="alert alert-danger print-error-msg" style="display:none">
             <ul></ul>
         </div>

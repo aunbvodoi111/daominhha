@@ -1,6 +1,6 @@
 @extends('Admin.Layout.master')
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
 @section('content')
 
 <div id="obj">
@@ -135,6 +135,9 @@
                                                             </select>
                                                         </div>
                                                         <div class="col-10 col-md-11">
+                                                            <input placeholder="Nhập tiêu ch" type="text" name="link[]" class="form-control" id="row'+i+'" v-model="item.titleMain"> 
+                                                        </div>
+                                                        <div class="col-10 col-md-11">
                                                             <input placeholder="Nhập tiêu đề" type="text" name="link[]" class="form-control" id="row'+i+'" v-model="item.title"> 
                                                         </div>
                                                         <div class="col-2 col-md-1">
@@ -219,51 +222,11 @@
 
 @endsection
 @section('script')
-    <script>
-        var sort_by = '{!! json_encode($theloai) !!}'; 
-        var list_Type = '{!! json_encode($list_Type) !!}';
-    </script>
     <script type="text/javascript">
-        // $(document).ready(function() {
-        //     $('#select').change(function(event) {
-        //         var idTheLoai = $(this).val();
-        //         $.get('admin/ajax/theloai/'+idTheLoai, function(data) {
-        //             $('#test').html(data);
-        //         });
-        //     });
-        //     $('#test').click(function(event) {
-        //         var TenSession = $(this).text();
-        //         $.get('admin/ajax/xoasession/'+TenSession, function(data) {
-        //             $('#test').text(data);
-        //         });
-        //     });
-        // });
-        // $(document).ready(function(){
-        //     var i = 1
-        //     $('.add-form').click(function(event) {
-        //         i++
-        //         var newInput = $('<div id="as'+i+'"><input placeholder="Nhập tiêu đề" type="text" name="link[]" class="form-control" id="row'+i+'"> <div><div class="col-sm-12"><p class=" fa fa-trash-o anhquy" attr_data="'+ i +'"></p></div><p class="btn btn-danger add-form-child" attr_data="'+ i +'">Thêm form nhập</p></div></div>');
-        //         $('#password').append(newInput);
-        //     });
-        //     $(document).on('click', '.add-form-child', function() {
-                
-        //         var id = $(this).attr('attr_data')
-
-        //         var newInput = $('<input placeholder="Nhập link" type="text" name="data[]" class="form-control" id="ta'+i+'"  > <p class=" fa fa-trash-o child" attr_data="'+ i +'"></p>');
-        //         $('#row'+ id ).after(newInput);
-        //     });
-        //     $(document).on('click', '.anhquy', function() {
-        //         var id = $(this).attr('attr_data') 
-        //         $(this).remove();
-        //         $('#as'+ id ).remove();
-        //     });
-        //     $(document).on('click', '.child', function() {
-        //         var id = $(this).attr('attr_data')
-        //         $(this).remove();
-        //         $('#ta'+ id ).remove();
-        //     });
-        // });
+        var list_Type = '{!! json_encode($listType) !!}';
+        var sort_by = '{!! json_encode($theloai) !!}'; 
     </script>
+    
     <script>
         var app_cart = new Vue({
             el:'#obj',
@@ -327,6 +290,7 @@
                 addform(){
                     var haha = {
                         title : '',
+                        titleMain :'',
                         typelink:0,
                         type:0,
                         childLink:[]

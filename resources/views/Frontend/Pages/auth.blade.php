@@ -106,8 +106,15 @@
         </form>
     </div>
 </div>
+@if(\Auth::user())
+    <script>
+        window.location.href = '/'
+    </script>
+@endif
 <script>
+    
     $(document).ready(function(){
+        
         $('.register').hide();
         $('.title-rg').click(function(){
             $('.login').hide();
@@ -137,6 +144,12 @@
                         $('.passwordre').val('');
                         $('.emailre').val('');
                         $('.password_confirmedre').val('');
+                        setTimeout(function(){ 
+                        window.location.href = '/aaaaaaaaa' 
+                        window.location.href = '/' }, 500);
+                        setTimeout(function(){ 
+                        window.location.href = '/aaaaaaaaa' 
+                        window.location.href = '/' }, 700);
                     }else{
                         printErrorMsg(data.error);
                     }
@@ -172,7 +185,14 @@
                         $('.passwordre').val('');
                         $('.emailre').val('');
                         $('.password_confirmedre').val('');
-                    }else if(data.errorr){
+                        setTimeout(function(){ window.location.href = '/' }, 1200);
+                    }
+                    else if(data.er1){
+                        swal('Lỗi đăng nhập','Bạn chưa xác nhận email cho tải khoản này','error')
+                    }else if(data.er2){
+                        swal('Lỗi đăng nhập','Bạn vui lòng liên hệ với https://www.facebook.com/DaominhhaTaiGameMienPhi để được kích hoạt tài khoản','error')
+                    }
+                    else if(data.errorr){
                         swal('Lỗi đăng nhập','Vui lòng kiểm tra lại tải khoản mật khẩu','error')
                     }
                     else{

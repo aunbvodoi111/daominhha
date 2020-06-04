@@ -49,8 +49,22 @@
                                 <form action="{{asset('admin/tonghop/sua/'.$totalGame->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
                                     {{csrf_field()}}
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Số game</label></div>
+                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Số game tải mỗi ngày</label></div>
                                         <div class="col-12 col-md-9"><input type="text" id="text-input" name="sogame" placeholder="Nhập tên thể loại" class="form-control" value="{{$totalGame->sogame}}"></div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Password truy cập link rút gọn</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="password" placeholder="Nhập tên thể loại" class="form-control" value="{{$totalGame->password}}"></div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Quyền copy</label></div>
+                                        <div class="col-12 col-md-9">
+                                            <select class="form-control" name="copy">
+                                                <option value="3">ADMIN</option>
+                                                <option value="0">MEMBER</option>
+                                                <option value="-1">TẤT CẢ</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="card-footer">
                                         <button type="submit" class="btn btn-primary btn-sm">
@@ -64,6 +78,8 @@
                             </div>
                             
                         </div>
+
+                       
                     </div>
 
                 </div>

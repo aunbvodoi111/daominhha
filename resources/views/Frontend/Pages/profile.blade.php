@@ -116,6 +116,11 @@
             </div>
         </div>
     </div>
+    @if(!\Auth::user())
+        <script>
+            window.location.href = '/'
+        </script>
+    @endif
     <style>
         body, h3{
             color:white;
