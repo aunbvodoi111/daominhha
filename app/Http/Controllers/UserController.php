@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\User;
 use Illuminate\Support\Facades\Hash;
 use Auth;
+use App\GamesModel;
 use App\Contact;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\ForgetMailable;
@@ -18,8 +19,21 @@ class UserController extends Controller
 	//
 	
 	public function __construct(){
-        $totalGame = totalGame::find(1);
+        $totalGame = totalGame::find(1); 
+        $link_loaded = [];
+        $id_loaded = 0;
+        $this->middleware(function ($request, $next) {
+     
+            if(\Auth::user()){
+                $link_loaded = User::find(\Auth::user()->id);
+                View::share('link_loaded', $link_loaded);
+            }
+            
+            return $next($request);
+        });
+        
         View::share('totalGame', $totalGame);
+        
     }
     public function getDanhSach(){
     	$users = User::all();

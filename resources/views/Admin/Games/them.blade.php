@@ -181,7 +181,7 @@
                                             <div class="form-check">
                                                 <div class="radio">
                                                     <label for="radio1" class="form-check-label ">
-                                                        <input type="radio" id="radio1" name="CapNhat" value="Co" class="form-check-input">Có
+                                                        <input type="radio" id="radio1" name="CapNhat" value="Co" class="form-check-input" v-model="game.CapNhat">Có
                                                     </label>
                                                 </div>
                                                 <div class="radio">
@@ -197,12 +197,16 @@
                                         <div class="col-12 col-md-9"><textarea name="GioiThieu" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor" ></textarea></div>
                                     </div>
                                     <div class="row form-group">
+                                        <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Giới thiệu</label></div>
+                                        <div class="col-12 col-md-9"><textarea name="GioiThieu" id="textarea-input " rows="9" placeholder="Content..." class="form-control" v-model="game.GioiThieu"></textarea></div>
+                                    </div>
+                                    <div class="row form-group">
                                         <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Nội dung</label></div>
                                         <div class="col-12 col-md-9"><textarea name="NoiDung" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Link Games</label></div>
-                                        <div class="col-12 col-md-9"><textarea name="LinkGame" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
+                                        <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Giới thiệu</label></div>
+                                        <div class="col-12 col-md-9"><textarea name="GioiThieu" id="textarea-input " rows="9" placeholder="Content..." class="form-control" v-model="game.NoiDung"></textarea></div>
                                     </div>
                                     <div class="card-footer">
                                         <button type="button" class="btn btn-primary btn-sm" v-on:click="send">
@@ -262,6 +266,9 @@
                     AnhPhu3 : '',
                     AnhPhu4 : '',
                     AnhMini : '',
+                    NoiDung : '',
+                    GioiThieu : '',
+                    CapNhat:'',
                 },
                 data:[
                 ],

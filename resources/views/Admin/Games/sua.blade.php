@@ -44,7 +44,7 @@
                                 <strong>Sửa Games</strong>
                             </div>
                             <div class="card-body card-block">
-                                <form action="{{asset('admin/games/sua/'.$games->id)}}" method="post" enctype="multipart/form-data" class="form-horizontal">
+                                <form action="" method="post" enctype="multipart/form-data" class="form-horizontal">
                                     {{csrf_field()}}
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="select" class=" form-control-label">Tag thể loại</label></div>
@@ -173,21 +173,39 @@
                                         <p class="btn btn-danger add-form" v-on:click="addform">Thêm form nhập</p>
                                         
                                     </div>
+
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Giới thiệu</label></div>
-                                        <div class="col-12 col-md-9"><textarea name="GioiThieublod" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor">{{$games->GioiThieu}}</textarea></div>
+                                        <div class="col col-md-3"><label class=" form-control-label">Cập nhật</label></div>
+                                        <div class="col col-md-9">
+                                            <div class="form-check">
+                                                <div class="radio">
+                                                    <label for="radio1" class="form-check-label ">
+                                                        <input type="radio" id="radio1" name="CapNhat" value="Co" class="form-check-input" v-model="list_Type.CurrentTime">Có
+                                                    </label>
+                                                </div>
+                                                <div class="radio">
+                                                    <label for="radio2" class="form-check-label ">
+                                                        <input type="radio" id="radio2" name="CapNhat" value="Khong" class="form-check-input" checked="">Không
+                                                    </label>
+                                                </div>                                              
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Giới thiệu</label></div>
-                                    <div class="col-12 col-md-9"><textarea name="GioiThieu"  rows="9" placeholder="Content..." class="form-control " v-model="list_Type.GioiThieu">{{$games->GioiThieu}}</textarea></div>
+                                        <div class="col-12 col-md-9"><textarea name="GioiThieublod" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
+                                    </div>
+                                    <div class="row form-group">
+                                        <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Giới thiệu</label></div>
+                                    <div class="col-12 col-md-9"><textarea name="GioiThieu"  rows="9" placeholder="Content..." class="form-control " v-model="list_Type.GioiThieu"></textarea></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Nội dung</label></div>
-                                        <div class="col-12 col-md-9"><textarea name="NoiDung" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor">{{$games->NoiDung}}</textarea></div>
+                                        <div class="col-12 col-md-9"><textarea name="NoiDung" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label for="textarea-input" class=" form-control-label">Link Games</label></div>
-                                        <div class="col-12 col-md-9"><textarea name="LinkGame" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor">{{$games->LinkGame}}</textarea></div>
+                                        <div class="col-12 col-md-9"><textarea name="LinkGame" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
                                     </div>
                                     <div class="card-footer">
                                         <button type="button" class="btn btn-primary btn-sm" v-on:click="send">

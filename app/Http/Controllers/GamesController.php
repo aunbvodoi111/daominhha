@@ -50,9 +50,6 @@ class GamesController extends Controller
         $games->Series = $request->game['Series'];
         $games->Email = $request->game['Email'];
         $games->MoTa = 1;
-        if ($request->CapNhat == "Co") {
-            $games->CurrentTime = date('Y-m-d H:i:s');
-		}
 		$games->Avatar = $request->game['Avatar'];
     	$games->AnhChinh = $request->game['AnhChinh'];
     	$games->AnhPhu1 = $request->game['AnhPhu1'];
@@ -60,10 +57,12 @@ class GamesController extends Controller
     	$games->AnhPhu3 = $request->game['AnhPhu3'];
 		$games->AnhPhu4 = $request->game['AnhPhu4'];
 		$games->AnhMini = $request->game['AnhMini'];
-    	$games->GioiThieu = 1;
-    	$games->NoiDung = 1;
-		$games->LinkGame = 1;
-		
+    	$games->GioiThieu = $request->game['GioiThieu'];
+    	$games->NoiDung = $request->game['NoiDung'];
+		$games->LinkGame = 0;
+		if ($request->game['CapNhat'] == "Co") {
+            $games->CurrentTime = date('Y-m-d H:i:s');
+		}
 		$games->save();
 		
 		if(isset($request->data)){
@@ -87,10 +86,11 @@ class GamesController extends Controller
 				}
 			}
 		}
-    	foreach ($request['listTagName'] as $data) {
+		// dd($request['listTagName']);
+    	foreach ($request['listTagName'] as $anhquy) {
     		$themtag = new TagModel;
-    		$themtag->TagName = $data['Name'].'-'.$games->Name;
-    		$themtag->id_TheLoai = $data['id'];
+    		$themtag->TagName = $anhquy['Name'].'-'.$games->Name;
+    		$themtag->id_TheLoai = $anhquy['id'];
     		$themtag->id_Games = $games->id;
     		$themtag->save();
 		}
@@ -101,9 +101,16 @@ class GamesController extends Controller
 
     public function getSua($id, Tag $tag){
     	$theloai = TheLoaiModel::all();
-		$games = GamesModel::where('id',$id)->with('link_list.list')->with('games_tag.tag_theloai')->first();
+		$games = GamesModel::where('id',$id)->with('link_list.list')->with('games_tag.tag_theloai')
+		->first();
+		
+		unset($games->NoiDung);
+		unset($games->GioiThieu);
+
 		$theloai = TheLoaiModel::all();
 		$listType = List_Type::all();
+	
+		
     	return view('Admin.Games.sua', ['games' => $games, 'tag' => $tag, 'theloai' => $theloai, 'listType' => $listType]);
     }
 
@@ -119,7 +126,7 @@ class GamesController extends Controller
         $games->Series = $request->listTagName['Series'];
         $games->Email = $request->listTagName['Email'];
         $games->MoTa = 1;
-        if ($request->CapNhat == "Co") {
+        if ($request->listTagName['CurrentTime'] == "Co") {
             $games->CurrentTime = date('Y-m-d H:i:s');
 		}
 		$games->Avatar = $request->listTagName['Avatar'];
@@ -129,7 +136,7 @@ class GamesController extends Controller
     	$games->AnhPhu3 = $request->listTagName['AnhPhu3'];
 		$games->AnhPhu4 = $request->listTagName['AnhPhu4'];
 		$games->AnhMini = $request->listTagName['AnhMini'];
-    	$games->GioiThieu = $request->listTagName['GioiThieu'];
+    	$games->GioiThieu = 1;
     	$games->NoiDung = 1;
 		$games->LinkGame = 1;
 		
@@ -148,10 +155,8 @@ class GamesController extends Controller
 				$titleLink->delete();
 			}
 		}
-		foreach ($request->listTagName['link_list'] as $data) {
-			
+		foreach ($request->listTagName['link_list'] as $data) { 
 			$titleLink = new TitleLink;
-			
 			$titleLink->link  = $data['link'];
 			$titleLink->title  = $data['title'];
 			$titleLink->type  = $data['type'];

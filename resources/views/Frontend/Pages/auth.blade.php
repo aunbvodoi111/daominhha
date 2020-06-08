@@ -1,10 +1,8 @@
 @extends('Frontend.Layout.master')
 @section('content')
-
-
 <div class="container " >
-    <div class="modal-header">
-        <h5 class="modal-title title-rg" id="exampleModalLabel">Đăng kí</h5>
+    <div class="modal-header pr-tit">
+        <h1 class="h1-title" style="text-align: center">Đăng kí</h1>
     </div>
     <div class="modal-body register">
         <div class="alert alert-danger print-error-msg" style="display:none">
@@ -35,7 +33,7 @@
             </div>
             <div class="modal-footer">
                 <button class="nk-btn nk-btn-rounded nk-btn-color-white" id="gui">
-                    <span>Send</span>
+                    <span>Gửi</span>
                     <span class="icon"><i class="ion-paper-airplane"></i></span>
                 </button>
             </div>
@@ -145,4 +143,19 @@
         }
     });
 </script>
+
+<style>
+    .pr-tit::after {
+        margin-top:42px; 
+        content: "";
+        display: block;
+        -webkit-box-flex: 100;
+        -ms-flex: 100;
+        flex: 100;
+        border-bottom: 4px solid #dd163b;
+        -webkit-transform: translateY(-12px);
+        -ms-transform: translateY(-12px);
+        transform: translateY(-12px);
+    }
+</style>
 @endsection
