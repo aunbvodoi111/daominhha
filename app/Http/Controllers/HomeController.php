@@ -30,9 +30,12 @@ class HomeController extends Controller
         
         View::share('totalGame', $totalGame);
         
+
     }
+    
 
     public function getHome(){
+        
         $games = GamesModel::select('id', 'Name', 'AnhChinh', 'Avatar', 'TenKhongDau', 'TheLoai', 'SoLuotXem', 'MoTa', 'AnhMini', 'created_at')->orderBy('CurrentTime', 'desc')->where('id','!=',997)->where('id','!=',8)->where('id','!=',40)->where('id','!=',80)->take(20)->get();
         $gamehot = GamesModel::select('id', 'Name', 'Avatar', 'TenKhongDau', 'MoTa', 'AnhMini', 'created_at')->where('id',601)->orwhere('id',2151)->orwhere('id',2172)->orwhere('id',2239)->orwhere('id',13)->orderBy('id','desc')->get();
         $gametop = GamesModel::select('id', 'Name', 'AnhChinh', 'Avatar', 'TenKhongDau', 'TheLoai', 'SoLuotXem', 'MoTa', 'AnhMini', 'created_at')->where('id',1784)->orwhere('id',40)->orwhere('id',8)->orwhere('id',997)->orderBy('id','desc')->get();
@@ -43,7 +46,7 @@ class HomeController extends Controller
     	$background = 1;
         return view('Frontend.Pages.home', ['games' => $games, 'gamehot' => $gamehot, 'gametop' => $gametop, 'gameactive' => $gameactive, 'background' => $background]);
     }
-
+    
     public function getGamesDetail($TenKhongDau, $id){
     	$games = GamesModel::find($id);
     	$background = 2;
@@ -130,8 +133,30 @@ class HomeController extends Controller
     public function link($id){
         $background = 1;
         $totalGame = totalGame::find(1);
-        $data = Link_List::find($id);
-        return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
+        $data = Link_List::where('code',$id)->first();
+        // dd();
+        if($data->title_link->type_link && $data->title_link->type == 1){
+            if(\Auth::user()){
+                $link_loaded = Linkhide::where('id_user',\Auth::user()->id)->get();
+                // dd($link_loaded,$data->title_link->id_product);
+                $id = 0;
+                foreach($link_loaded as $item){
+                    if($item->id_product == $data->title_link->id_product){
+                        $id = 1;
+                    }
+                }
+                if($id == 1){
+                    return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
+                }else{
+                    return redirect('/');
+                } 
+            }else{
+                return redirect('/login');
+            }
+        }else{
+            return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
+        }
+        
     }
     
     public function checkPassLink(Request $request){

@@ -251,7 +251,7 @@
                         </div>
                     </div>
                @else
-                    <p style="margin-right: 20px;cursor:pointer;"><i class="fas fa-user" data-toggle="modal" data-target="#exampleModal"></i></p>
+                    <p style="margin-right: 20px;cursor:pointer;"><i class="fas fa-user" data-toggle="modal" data-target="#exampleModallo"></i></p>
                @endif
             </ul>
         </div>
@@ -315,7 +315,7 @@
             </div>
         </div>
     </nav>
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="exampleModallo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
             <div class="modal-header">

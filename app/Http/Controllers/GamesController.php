@@ -37,6 +37,9 @@ class GamesController extends Controller
 			'TheLoaiModel' => $TheLoaiModel
         ]);
 	}
+
+
+	
     public function postThem(Request $request, Tag $tag){
 		// dd($request->all());
     	// $this->validate($request, ['Name' => 'required|unique:games,Name', 'TheLoai' => 'required', 'KichThuoc' => 'required', 'SoPart' => 'required', 'AnhChinh' => 'required', 'AnhPhu1' => 'required', 'AnhPhu2' => 'required', 'AnhPhu3' => 'required', 'AnhPhu4' => 'required', 'GioiThieu' => 'required', 'LinkGame' => 'required'], ['Name.required' => 'Tên game không được để trống', 'Name.unique' => 'Tên game đã bị trùng', 'TheLoai.required' => 'Thể loại không được để trống', 'KichThuoc.required' => 'Kích thước không được để trống', 'SoPart.required' => 'Số part không được để trống', 'AnhChinh.required' => 'Ảnh chính không được để trống', 'AnhPhu1.required' => 'Ảnh phụ 1 không được để trống', 'AnhPhu2.required' => 'Ảnh phụ 2 không được để trống', 'AnhPhu3.required' => 'Ảnh phụ 3 không được để trống', 'AnhPhu4.required' => 'Ảnh phụ 4 không được để trống', 'GioiThieu.required' => 'Giới thiệu không được để trống', 'LinkGame.required' => 'Link game không được để trống']);
@@ -76,12 +79,11 @@ class GamesController extends Controller
 				$titleLink->type_link  = $data['typelink'];
 				$titleLink->save();
 				foreach ($data['childLink'] as $item) {
-					
 					$linkList = new Link_list;
 					$linkList->link  = $item['link'];
 					$linkList->type  = 1;
 					$linkList->id_title  = $titleLink->id;
-					$linkList->code  = 1;
+					$linkList->code  = $this->generateRandomString(10).'-'.$this->generateRandomString(5).'-'.$this->generateRandomString(8).'-'.$this->generateRandomString(11);
 					$linkList->save();
 				}
 			}
@@ -99,6 +101,16 @@ class GamesController extends Controller
     	// return redirect('admin/games/danhsach')->with('thongbao', 'Thêm thành công');
     }
 
+	public function generateRandomString($length) {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        $charactersLength = strlen($characters);
+        $randomString = '';
+        for ($i = 0; $i < $length; $i++) {
+            $randomString .= $characters[rand(0, $charactersLength - 1)];
+        }
+        return $randomString;
+	}
+	
     public function getSua($id, Tag $tag){
     	$theloai = TheLoaiModel::all();
 		$games = GamesModel::where('id',$id)->with('link_list.list')->with('games_tag.tag_theloai')
@@ -139,8 +151,6 @@ class GamesController extends Controller
     	$games->GioiThieu = 1;
     	$games->NoiDung = 1;
 		$games->LinkGame = 1;
-		
-		
         $tagcurent = TagModel::where('id_Games', $id)->get();
         foreach ($tagcurent as $data) {
             $data->TagName = $data->tag_theloai->Name.'-'.$request->Name;
