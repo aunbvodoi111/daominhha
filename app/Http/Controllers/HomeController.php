@@ -15,8 +15,21 @@ use View;
 class HomeController extends Controller
 {
     public function __construct(){
-        $totalGame = totalGame::find(1);
+        $totalGame = totalGame::find(1); 
+        $link_loaded = [];
+        $id_loaded = 0;
+        $this->middleware(function ($request, $next) {
+     
+            if(\Auth::user()){
+                $link_loaded = User::find(\Auth::user()->id);
+                View::share('link_loaded', $link_loaded);
+            }
+            
+            return $next($request);
+        });
+        
         View::share('totalGame', $totalGame);
+        
     }
 
     public function getHome(){
@@ -50,6 +63,7 @@ class HomeController extends Controller
                 }
             }
         }
+
         $totalGame = totalGame::find(1);
     	return view('Frontend.Pages.games-detail', ['totalGame'=>$totalGame,'games' => $games, 'background' => $background, 'gamescungseries' => $gamescungseries, 'gamesrandom' => $gamesrandom, 'seotitle' => $seotitle, 'gamesxemnhieu' => $gamesxemnhieu, 'link_loaded' => $link_loaded, 'id_loaded' => $id_loaded]);
     }

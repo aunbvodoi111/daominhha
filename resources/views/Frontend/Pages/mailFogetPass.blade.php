@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input type="button" class="btn btn-danger" value="Gửi" id="register"/>
+            <input type="button" class="btn btn-danger" value="Gửi" id="forget"/>
         </div>
         </div>
         </form>
@@ -39,23 +39,25 @@
 </div>
 <script>
     $(document).ready(function() {
-        $("#register").click(function(e){
+        $("#forget").click(function(e){
             e.preventDefault();
             var _token = $("input[name='_token']").val();
             var email = $('.email').val();
             $.ajax({
                 url: "/ForgotPassword",
                 type:'POST',
-                data: {_token:_token, email:email},
+                data: {_token:_token, email:email, g_recaptcha_response: grecaptcha.getResponse()},
                 success: function(data) {
                     if(data.success){
-                        swal('Thành công','Bạn vui lòng xác nhận email','success')
+                        swal('Thành công','Bạn vui lòng đăng nhập vào email của bạn','success')
                         $('.namere').val('');
                         $('.passwordre').val('');
                         $('.emailre').val('');
                         $('.password_confirmedre').val('');
-                    }else if(data.errorr){
-                        swal('Lỗi đăng nhập','Vui lòng kiểm tra lại tải khoản mật khẩu','error')
+                    }else if(data.error){
+                        swal('Lỗi mail','Email không tồn tại.Xin vui lòng nhập lại!','error')
+                    }else if(data.capcha){
+                        swal('Lỗi capcha','Xin vui lòng click vào capcha','error')
                     }
                     else{
                         printErrorMsgg(data.error);

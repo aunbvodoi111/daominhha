@@ -89,16 +89,17 @@ class UserController extends Controller
 	public function postLogin(Request $request){
 		$validator = Validator::make($request->all(), ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
 	
-			if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-				if(Auth::user()->active_mail == 0){
-					return response()->json(['er1'=>'Added new records.']);
-				}else if(Auth::user()->active == 0){
-					return response()->json(['er2'=>'Added new records.']);
-				}else{
-					return response()->json(['success'=>'Added new records.']);
-				}
+			$user = User::where('email',$request->email)->first();
+			if($user->active_mail == 0){
+				return response()->json(['er1'=>'Added new records.']);
+			}else if($user->active == 0){
+				return response()->json(['er2'=>'Added new records.']);
 			}else{
-				return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+				if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+					return response()->json(['success'=>'Added new records.']);
+				}else{
+					return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+				}
 			}
 		
             return response()->json(['error'=>$validator->errors()->all()]);
@@ -138,7 +139,6 @@ class UserController extends Controller
 	}
 	public function storeCaptchaForm(Request $request)
     {
-		// dd(\Request::ip());
 		$validator = Validator::make($request->all(), 
 		[
 			'email' => 'required|unique:users,email', 
@@ -172,7 +172,7 @@ class UserController extends Controller
 			);
 			$user->remember_token = $name['code'];
 			$user->save();
-			Mail::to('phamquycntta@gmail.com')->send(new SendMailable($name));
+			// Mail::to('phamquycntta@gmail.com')->send(new SendMailable($user));
 			return response()->json(['success'=>'Added new records.']);
         }
 
@@ -194,7 +194,9 @@ class UserController extends Controller
         return view('Frontend.Pages.mailFogetPass',compact('background'));
 	}
 	public function postEmailForgotPassword(Request $request){
-		
+		if($request->g_recaptcha_response == null){
+			return response()->json(['capcha'=>'Added new records.']);
+		}
         $user = User::where('email',$request->email)->first();
         if($user) {
             $newData = [
@@ -393,4 +395,20 @@ class UserController extends Controller
 			'success' => 'success'
         ]);
 	}
+
+	public function userCheckF(Request $request){
+		if(Auth::user()){
+			$user = User::find(Auth::user()->id);
+			$user->check_f12 = $user->check_f12 + 1;
+			$user->save();
+			return response([
+				'success' => 'success'
+			]);
+		}
+		return response([
+			'error' => 'error'
+        ]);
+	}
+
+	
 }

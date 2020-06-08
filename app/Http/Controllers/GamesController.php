@@ -70,8 +70,8 @@ class GamesController extends Controller
 			foreach ($request->data as $data) {
 				
 				$titleLink = new TitleLink;
-				
 				$titleLink->link  = $data['title'];
+				$titleLink->title  = $data['titleMain'];
 				$titleLink->type  = $data['type'];
 				$titleLink->id_product  = $games->id;
 				$titleLink->type_link  = $data['typelink'];
@@ -94,9 +94,9 @@ class GamesController extends Controller
     		$themtag->id_Games = $games->id;
     		$themtag->save();
 		}
-		dd(1);
-    	Session()->flush();
-    	return redirect('admin/games/danhsach')->with('thongbao', 'Thêm thành công');
+		return response()->json(['success'=>'Added new records.']);
+    	// Session()->flush();
+    	// return redirect('admin/games/danhsach')->with('thongbao', 'Thêm thành công');
     }
 
     public function getSua($id, Tag $tag){
@@ -140,47 +140,40 @@ class GamesController extends Controller
             $data->save();
         }
 		$games->save();
-
-			foreach ($request->listTagName['link_list'] as $data) {
-					
-				$titleLink = TitleLink::where('id_product',$games->id)->first();
+		foreach ($request->listTagName['link_list'] as $data) {
 				
-				if($titleLink != null){
-					
-					$titleLink->delete();
-					if($data['list']){
-						foreach ($data['list'] as $item) {
-							$link_list = Link_list::where('id_title',$titleLink->id)->first();
-							$link_list->delete();
-						}
-					}
-					
-				}
-			}
+			$titleLink = TitleLink::where('id_product',$games->id)->first();
 			
-			foreach ($request->listTagName['link_list'] as $data) {
-				
-				$titleLink = new TitleLink;
-				
-				$titleLink->link  = $data['link'];
-				$titleLink->title  = $data['title'];
-				$titleLink->type  = $data['type'];
-				$titleLink->id_product  = $games->id;
-				$titleLink->type_link  = $data['type_link'];
-				$titleLink->save();
-				foreach ($data['list'] as $item) {
-				
-					$linkList = new Link_list;
-					$linkList->link  = $item['link'];
-					$linkList->type  = 1;
-					$linkList->id_title  = $titleLink->id;
-					$linkList->code  = 1;
-					$linkList->save();
-				}
+			if($titleLink != null){
+				$titleLink->delete();
 			}
-	
-
-    	return redirect('admin/games/sua/'.$id)->with('thongbao', 'Sửa thành công');
+		}
+		foreach ($request->listTagName['link_list'] as $data) {
+			
+			$titleLink = new TitleLink;
+			
+			$titleLink->link  = $data['link'];
+			$titleLink->title  = $data['title'];
+			$titleLink->type  = $data['type'];
+			$titleLink->id_product  = $games->id;
+			$titleLink->type_link  = $data['type_link'];
+			$titleLink->save();
+			foreach ($data['list'] as $item) {
+			
+				$linkList = new Link_list;
+				$linkList->link  = $item['link'];
+				$linkList->type  = 1;
+				$linkList->id_title  = $titleLink->id;
+				$linkList->code  = 1;
+				$linkList->save();
+			}
+		}
+		$id = $games->id;
+		return response([
+            'ordersDetail'=> 'Added new records',
+            'id' => $id
+        ]);
+		return response()->json(['success'=>'Added new records.'],['id'=> 20]);
     } 
 
     public function getXoa($id){

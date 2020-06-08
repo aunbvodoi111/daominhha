@@ -114,42 +114,57 @@
                                         <div class="col-12 col-md-9"><input type="text" id="text-input" name="AnhMini" placeholder="url ảnh Mini" class="form-control" v-model="game.AnhMini"></div>
                                     </div>
                                     <div class="row form-group">
-                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Link google</label></div>
-                                        <div class="col-12 col-md-9">
+                                        
+                                        <div class="col-12 col-md-12">
                                             <div id="password"></div>
                                             <div id="as'+i+'" v-for="item in data" class="mt-3">
                                                 <hr>
                                                 <div>
                                                     <div class="row">
-                                                         <div class="col-12 col-md-12">
+                                                        <div class="col-2 col-md-2 mt-1">
+                                                            <p>Link gốc hay crack?</p> 
+                                                        </div>
+                                                         <div class="col-12 col-md-10 mt-1">
                                                             <select class="form-control" v-model="item.type">
                                                                 <option value="0">Chọn loại link</option>
                                                                 <option value="1">Link game gốc</option>
                                                                 <option value="2">Link game Crack</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-12 col-md-12">
+                                                        <div class="col-2 col-md-2 mt-1">
+                                                            <p>Loại link nào?</p> 
+                                                        </div>
+                                                        <div class="col-12 col-md-10">
                                                             <select class="form-control" v-model="item.typelink">
                                                                 <option value="0">Chọn link</option>
                                                                 <option v-for="prod in list_Type" v-bind:value="prod.id" >@{{prod.link}}</option>
                                                             </select>
                                                         </div>
-                                                        <div class="col-10 col-md-11">
+                                                        <div class="col-2 col-md-2 mt-1">
+                                                            <p>Mô tiêu đề link là gi?</p> 
+                                                        </div>
+                                                        <div class="col-10 col-md-9 mt-1">
                                                             <input placeholder="Nhập tiêu ch" type="text" name="link[]" class="form-control" id="row'+i+'" v-model="item.titleMain"> 
                                                         </div>
-                                                        <div class="col-10 col-md-11">
+                                                        <div class="col-2 col-md-2 mt-1">
+                                                            <p>Mô tả link tải</p> 
+                                                        </div>
+                                                        <div class="col-10 col-md-9 mt-1">
                                                             <input placeholder="Nhập tiêu đề" type="text" name="link[]" class="form-control" id="row'+i+'" v-model="item.title"> 
                                                         </div>
-                                                        <div class="col-2 col-md-1">
+                                                        <div class="col-2 col-md-1 mt-1">
                                                             <p class=" fa fa-trash-o anhquy" attr_data="'+ i +'"  @click="removeLink(item)"></p>
                                                         </div>
                                                     </div>
                                                     <div v-for="prod in item.childLink" class="mt-1">
                                                         <div class="row">
-                                                            <div class="col-10 col-md-11">
+                                                            <div class="col-2 col-md-2 mt-1">
+                                                                <p>Nhập link tải về</p> 
+                                                            </div>
+                                                            <div class="col-10 col-md-9 mt-1">
                                                                 <input  placeholder="Nhập link" type="text" name="link[]" class="form-control" id="row'+i+'" v-model="prod.link">
                                                             </div>
-                                                            <div class="col-2 col-md-1">
+                                                            <div class="col-2 col-md-1 mt-1">
                                                                 <p class=" fa fa-trash-o child" attr_data="'+ i +'" @click="removeFormLink(item.childLink,prod)"></p>
                                                             </div>
                                                         </div>
@@ -159,7 +174,6 @@
                                             </div>
                                         </div>
                                         <p class="btn btn-danger add-form" v-on:click="addform">Thêm form nhập</p>
-                                        <p class="btn btn-danger add-form" v-on:click="send">send</p>
                                     </div>
                                     <div class="row form-group">
                                         <div class="col col-md-3"><label class=" form-control-label">Cập nhật</label></div>
@@ -191,7 +205,7 @@
                                         <div class="col-12 col-md-9"><textarea name="LinkGame" id="textarea-input demo" rows="9" placeholder="Content..." class="form-control ckeditor"></textarea></div>
                                     </div>
                                     <div class="card-footer">
-                                        <button type="submit" class="btn btn-primary btn-sm">
+                                        <button type="button" class="btn btn-primary btn-sm" v-on:click="send">
                                             <i class="fa fa-dot-circle-o"></i> Thêm
                                         </button>
                                         <button type="reset" class="btn btn-danger btn-sm">
@@ -256,7 +270,7 @@
                 list_Type:JSON.parse(list_Type)
             },
             mounted(){
-            
+                
             },
             methods:{
                 addTag(item){
@@ -317,8 +331,11 @@
                         },
                         dataType: 'json',
                     }).done(function(json) {
+                        swal('success', 'Thêm thành công', 'success')
                         
-                    });
+                    }).fail(function(data){
+                        swal('error', 'Kiểm tra lại thông tin vừa nhập', 'error')
+                    });;
                 }
             }
         })

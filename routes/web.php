@@ -24,10 +24,17 @@ Route::get('games-viethoa.html', 'HomeController@getGamesVietHoa');
 Route::get('search', 'HomeController@getSearch');
 Route::get('livesearch', 'HomeController@getLiveSearch');
 
+Route::get('/anhquy111', function(){
+    
+    Schema::table('link_lists', function ($table) {
+        $table->integer('id_title')->unsigned();
+        $table->foreign('id_title')->references('id')->on('title_links')->onDelete('cascade');
+    });
+});
 Route::get('admin/login', 'UserController@getLogin');
 Route::post('admin/login', 'UserController@postLogin');
 Route::get('admin/logout', 'UserController@getLogout');
-Route::get('aaaaaaaaa', 'UserController@loginaaa');
+Route::get('login', 'UserController@loginaaa');
 Route::get('link/{id}', 'HomeController@link');
 Route::post('aaaa', 'UserController@storeCaptchaForm');
 Route::post('checkpasslink', 'HomeController@checkPassLink');
@@ -35,6 +42,7 @@ Route::post('savelinkgame', 'HomeController@savelinkgame');
 Route::get('download/{id}', 'HomeController@download');
 Route::get('donate', 'HomeController@donate');
 Route::get('logout', 'UserController@logout');
+Route::post('userCheckF', 'UserController@userCheckF');
 Route::get('profile', 'UserController@profile');
 Route::post('addcontact', 'UserController@addcontact');
 Route::post('changePassword', 'UserController@changePassword')->name('changePassword');

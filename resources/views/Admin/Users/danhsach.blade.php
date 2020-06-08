@@ -47,6 +47,8 @@
                                 <th>id</th>
                                 <th>Tên User</th>
                                 <th>Email</th>
+                                <th>Số lần f12</th>
+                                <th>UserOnline</th>
                                 <th>Link Facebook</th>
                                 <th>Nguyên nhân khóa</th>
                                 <th>Active</th>
@@ -59,6 +61,11 @@
                                 <td>{{$items->id}}</td>
                                 <td>{{$items->name}}</td>
                                 <td>{{$items->email}}</td>
+                                <td>{{$items->check_f12}}</td>
+                                <td>
+                                  @if($items->isOnline())
+                                      user đang online
+                                  @endif</td>
                                 <td>{{$items->facebook}}</td>
                                 <td>{{$items->reason}}</td>
                                 <td>

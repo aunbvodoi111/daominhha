@@ -28,12 +28,6 @@
                     <label for="recipient-name" class="col-form-label">NHẬP LẠI MẬT KHẨU:</label>
                     <input type="password" class="form-control name" id="recipient-name" name="new-password_confirmation">
                 </div>
-                <div class="form-group">
-                <label for="captcha">Captcha</label>
-                    {!! NoCaptcha::renderJs() !!}
-                    {!! NoCaptcha::display() !!}
-                <span class="text-danger">{{ $errors->first('g-recaptcha-response') }}</span>
-                </div>
             
             </div>
             <div class="modal-footer">

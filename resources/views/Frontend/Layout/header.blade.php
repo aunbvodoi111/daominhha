@@ -171,7 +171,7 @@
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
     <script src="https://unpkg.com/sweetalert2@7.18.0/dist/sweetalert2.all.js"></script>
     <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
-	    <script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
+	<script src="http://ajax.aspnetcdn.com/ajax/jquery.validate/1.9/jquery.validate.min.js" type="text/javascript"></script>
 
 
     <!-- Flickity -->
@@ -204,34 +204,19 @@
         if (top.location != self.location)
         {top.location = self.location}
         window.addEventListener('keyup', function(e){
-            console.log(e)
-            if(e.key === 'F10')
+            if(e.key === 'F12')
             {
-               swal('success','success','success')
+                var token =$("input[name='_token']").val();  	
+                $.ajax({
+                    url:'userCheckF',
+                    type:'post',
+                    dataType: 'json',
+                    data:{"_token":token},
+                }).done(function(json) {
+                    // console.log(json)
+                })
             }
         });
-        
-	$("#demoForm").validate({
-		onfocusout: false,
-		onkeyup: false,
-		onclick: false,
-		rules: {
-			"user": {
-				required: true,
-				maxlength: 15
-			},
-			"password": {
-				required: true,
-				minlength: 8
-			},
-			"re-password": {
-				equalTo: "#password",
-				minlength: 8
-			}
-		}
-	
-});
-
     </script>
 </head>
 
@@ -253,20 +238,20 @@
         <div class="nk-contacts-right">
             <ul class="nk-social-links">
                @if(\Auth::user())
-                    <div class="dropdown show">
+                    <div class="dropdown a-login show">
                         <a class=" dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             Xin chào : {{\Auth::user()->email}}
                         </a>
-                        <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                        <div class="dropdown-menu menu-a-drop" aria-labelledby="dropdownMenuLink">
                             <a class="dropdown-item" href="{{url('profile')}}">Hồ sơ cá nhân</a>
                             <a class="dropdown-item" href="{{url('donate')}}">Donate</a>
+                            <a class="dropdown-item" href="javascript:void(0)" data-toggle="modal" data-target="#exampleModalseen" data-whatever="@mdo" >Game đã tải hôm nay</a>
                             <a class="dropdown-item" href="#">Thông báo</a>
                             <a class="dropdown-item" href="{{url('logout')}}">Thoát</a>
                         </div>
                     </div>
-                    
                @else
-                    <p><a href="{{url('aaaaaaaaa')}}">Đăng nhập</a></p>
+                    <p style="margin-right: 20px;cursor:pointer;"><i class="fas fa-user" data-toggle="modal" data-target="#exampleModal"></i></p>
                @endif
             </ul>
         </div>
@@ -294,11 +279,11 @@
         <li class=" nk-drop-item">
 			<a href="{{asset('all-games.html')}}">Games</a>
 				<ul class="dropdown"> 
-				@foreach ($theloaiall as $items)           
-					<li>
-						<a href="{{asset('games-theloai/'.$items->TenKhongDau.'/'.$items->id.'.html')}}">{{$items->Name}}</a>
-					</li>
-				@endforeach
+                    @foreach ($theloaiall as $items)           
+                        <li>
+                            <a href="{{asset('games-theloai/'.$items->TenKhongDau.'/'.$items->id.'.html')}}">{{$items->Name}}</a>
+                        </li>
+                    @endforeach
             	</ul>
         </li>
         <li>
@@ -330,10 +315,124 @@
             </div>
         </div>
     </nav>
+    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalLabel"><span style="color:red">Đăng</span> nhập</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                @csrf
+                <div class="form-group">
+                  <label for="recipient-name" class="col-form-label">Email:</label>
+                  <input type="email" class="form-control emaillg" id="recipient-name">
+                </div>
+                <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Password:</label>
+                    <input type="password" class="form-control passwordlg" id="recipient-name">
+                  </div>
+              </form>
+              <p><a href="/ForgotPassword">Quên mật khẩu</a></p>
+              <p style="margin-top:-10px;"><a href="/login" >Đăng kí thành viên</a></p>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+              <button type="button" class="btn btn-primary" id="loginpop">Đăng nhập</button>
+            </div>
+          </div>
+        </div>
+      </div>
 
+      <div class="modal fade" id="exampleModalseen" tabindex="-1" role="dialog" aria-labelledby="exampleModalseen" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="exampleModalseen"><span style="color:red">Game</span> đã tải hôm nay</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <form>
+                <div id="search-data">
+                    <div class="search-info" style="height:auto">
+                        @if (\Auth::user())
+                            @if(count($link_loaded->link_loaded) > 0)
+                                <table class="table-search">	
+                                    @foreach ($link_loaded->link_loaded as $items)			
+                                        <tr>
+                                            <td><a href="{{asset('games-detail/'.$items->game_loaded->TenKhongDau.'/'.$items->game_loaded->id.'.html')}}" target="_blank"><img src="{{$items->game_loaded->AnhChinh}}" width="120px" height="70px"></a></td>
+                                            <td><a class="title-game-search" href="" target="_blank">{{$items->game_loaded->Name}}</a></td>
+                                        </tr>
+                                    @endforeach
+                            </table>
+                        @endif
+                        @else
+                            <h3><a href="/all-games.html">Hôm nay bạn chưa tải game nào click vào đây để tải game</a></h3>
+                        @endif
+					</div> 
+				</div>
+               
+              </form> 
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
+            </div>
+          </div>
+        </div>
+      </div>
 </header>
 
 <script>
+    $(document).ready(function() {
+        $("#loginpop").click(function(e){
+            e.preventDefault();
+            var _token = $("input[name='_token']").val();
+            var password = $('.passwordlg').val();
+            var email = $('.emaillg').val();
+            $.ajax({
+                url: "/admin/login",
+                type:'POST',
+                data: {_token:_token,password:password, email:email},
+                success: function(data) {
+                    if(data.success){
+                        swal('Thành công','Bạn vui lòng xác nhận email','success')
+                        $('.namere').val('');
+                        $('.passwordre').val('');
+                        $('.emailre').val('');
+                        $('.password_confirmedre').val('');
+                        setTimeout(function(){ window.location.href = '/' }, 1200);
+                    }
+                    else if(data.er1){
+                        swal('Lỗi đăng nhập','Bạn chưa xác nhận email cho tải khoản này','error')
+                    }else if(data.er2){
+                        swal('Lỗi đăng nhập','Bạn vui lòng liên hệ với https://www.facebook.com/DaominhhaTaiGameMienPhi để được kích hoạt tài khoản','error')
+                    }
+                    else if(data.errorr){
+                        swal('Lỗi đăng nhập','Vui lòng kiểm tra lại tải khoản mật khẩu','error')
+                    }
+                    else{
+                        printErrorMsgg(data.error);
+                    }
+                }
+            });
+
+
+        }); 
+        function printErrorMsgg (msg) {
+            console.log(msg)
+            $(".print-error-msg-lg").find("ul").html('');
+            $(".print-error-msg-lg").css('display','block');
+            
+            $.each( msg, function( key, value ) {
+                $(".print-error-msg-lg").find("ul").append('<li>'+value+'</li>');
+            });
+        }
+    });
     $(document).ready(function(){
         $('#register').click(function(){
             var name =$('.name').val();
@@ -361,12 +460,35 @@
     .dropdown-menu {
         z-index : 10001;
     }
-    .dropdown a{
+    .a-login a{
         display: block;
         font-size: 12px;
         font-weight: 600;
         text-transform: uppercase;
-     
-        color: #666;
+        color: white;
+    }
+
+    .page-item.active .page-link {
+        min-width: 42px !important;
+        height: 42px !important;
+        padding: 3px !important;
+        line-height: 28px !important;
+        color: #dd163b !important;
+        border: 4px solid !important;
+        border-radius: 21px !important;
+    }
+    .menu-a-drop a{
+        color: black;
+    }
+    .page-link {
+        display: flex;
+        flex-wrap: wrap;
+        font-size: 1.7rem;
+        font-weight: 600;
+        border-radius: 100% !important;
+        color: #fff !important;
+        background-color: black !important;
+        border: none !important;
+        display: block !important;
     }
 </style>

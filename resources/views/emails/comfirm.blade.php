@@ -4,14 +4,15 @@
         <meta charset="utf-8">
     </head>
     <body>
-        <h2>Verify Your Email Address</h2>
-
+        <h2>DAO MINH HA</h2>
+        <p>Email kích hoạt</p>
+        <p>Xin chào: <strong>{{$name['name']}}</strong></p>
+        <p>Tên đăng nhập của bạn là: <strong>{{$name['email']}}</strong></p>
         <div>
-            Thanks for creating an account with the verification demo app.
-            Please follow the link below to verify your email address
-            {{ URL::to('register/verify/' . $name['code']) }}.<br/>
-
+            Chào mừng bạn đã đến với Dao Minh Ha.
+            Đây là Email kích hoạt tài khoản. Bạn hãy bấm vào nút bên dưới để đến trang kích hoạt nhé
+            {{ URL::to('register/verify/' . $name['remember_token']) }}.<br/>
         </div>
-
     </body>
 </html>
+
