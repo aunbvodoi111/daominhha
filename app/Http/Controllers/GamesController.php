@@ -148,9 +148,6 @@ class GamesController extends Controller
     	$games->AnhPhu3 = $request->listTagName['AnhPhu3'];
 		$games->AnhPhu4 = $request->listTagName['AnhPhu4'];
 		$games->AnhMini = $request->listTagName['AnhMini'];
-    	$games->GioiThieu = 1;
-    	$games->NoiDung = 1;
-		$games->LinkGame = 1;
         $tagcurent = TagModel::where('id_Games', $id)->get();
         foreach ($tagcurent as $data) {
             $data->TagName = $data->tag_theloai->Name.'-'.$request->Name;

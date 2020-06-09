@@ -98,6 +98,11 @@
         <h6 style="color: yellow; margin-bottom: 30px;">Quan trọng: Nếu như bạn không vào được trang anotepad.com hoặc phản hồi quá lâu thì chỉ cần Reset lại cục mạng (Modem) là được nhé hoặc có thể Fake ip sang USA</h6>
         <h6 style="color: cyan; margin-bottom: 30px;">Thông báo: Hiện tại Fan Page của mình đang bị khóa thế nên các bạn tham gia vào Group này nhé: <a href="https://www.facebook.com/groups/558374361208287/" style="color: red;" target="_blank">Click here</a></h6>
     </div>
+    <div>
+        @if($games->LinkGame != '0')
+            {!! $games->LinkGame !!}
+        @endif
+    </div>
    <div class="tot">
     @if ( \Auth::user())
         @if ( $id_loaded == 0)
