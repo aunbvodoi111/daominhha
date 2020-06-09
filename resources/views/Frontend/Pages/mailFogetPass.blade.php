@@ -1,8 +1,8 @@
 @extends('Frontend.Layout.master')
 @section('content')
 <div class="container " >
-    <div class="modal-header">
-        <h5 class="modal-title title-rg" id="exampleModalLabel">lẤY LẠI MẬT KHẨU</h5>
+    <div class="modal-header pr-tit">
+        <h1 class="h1-title" style="text-align: center">lẤY LẠI MẬT KHẨU</h1>
     </div>
     <div class="modal-body register">
         @if (session('thongbao'))
@@ -31,7 +31,7 @@
             </div>
         </div>
         <div class="modal-footer">
-            <input type="button" class="btn btn-danger" value="Gửi" id="forget"/>
+            <input type="button" class="nk-btn nk-btn-color-primary" value="Gửi mail" id="forget"/>
         </div>
         </div>
         </form>
@@ -78,4 +78,18 @@
         }
     });
 </script>
+<style>
+    .pr-tit::after {
+        margin-top:42px; 
+        content: "";
+        display: block;
+        -webkit-box-flex: 100;
+        -ms-flex: 100;
+        flex: 100;
+        border-bottom: 4px solid #dd163b;
+        -webkit-transform: translateY(-12px);
+        -ms-transform: translateY(-12px);
+        transform: translateY(-12px);
+    }
+</style>
 @endsection

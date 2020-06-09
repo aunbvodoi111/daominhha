@@ -45,9 +45,10 @@
                             <thead>
                               <tr>
                                 <th>id</th>
-                                <th>Tên User</th>
-                                <th>Email</th>
+                                <th width="100px">Tên User</th>
+                                <th width="100px">Email</th>
                                 <th>Số lần f12</th>
+                                <th>Quyền</th>
                                 <th>UserOnline</th>
                                 <th>Link Facebook</th>
                                 <th>Nguyên nhân khóa</th>
@@ -58,15 +59,22 @@
                             <tbody>
                             @foreach ($users as $items)
                               <tr>
-                                <td>{{$items->id}}</td>
-                                <td>{{$items->name}}</td>
+                                <td width="100px">{{$items->id}}</td>
+                                <td width="100px">{{$items->name}}</td>
                                 <td>{{$items->email}}</td>
                                 <td>{{$items->check_f12}}</td>
                                 <td>
+                                  @if($items->role == 3)
+                                    <strong style="color:red">Admin</strong>
+                                  @else
+                                    Member
+                                  @endif
+                                </td>
+                                <td>
                                   @if($items->isOnline())
-                                      user đang online
+                                      Online
                                   @endif</td>
-                                <td>{{$items->facebook}}</td>
+                                <td><input class="form-control" value="{{$items->facebook}}"/></td>
                                 <td>{{$items->reason}}</td>
                                 <td>
                                     <img src="images/sw.png" class="sw all{{$items->id}}" attr_id="{{$items->id}}" attr_type="1" @if($items->active == 0) style="display:none;" @endif>
