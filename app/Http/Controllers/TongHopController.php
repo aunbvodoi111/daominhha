@@ -22,6 +22,7 @@ class TongHopController extends Controller
 		$totalGame->sogame = $request->sogame;
     	$totalGame->password = $request->password;
 		$totalGame->copy = $request->copy;
+		$totalGame->ip_check = $request->ip_check;
     	$totalGame->save();
     	return redirect('admin/tonghop/sua/'.$id)->with('thongbao', 'Sửa thành công');
     }

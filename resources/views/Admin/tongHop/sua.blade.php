@@ -57,6 +57,10 @@
                                         <div class="col-12 col-md-9"><input type="text" id="text-input" name="password" placeholder="Nhập tên thể loại" class="form-control" value="{{$totalGame->password}}"></div>
                                     </div>
                                     <div class="row form-group">
+                                        <div class="col col-md-3"><label for="text-input" class=" form-control-label">Số ip một user đăng nhập</label></div>
+                                        <div class="col-12 col-md-9"><input type="text" id="text-input" name="ip_check" placeholder="Nhập tên thể loại" class="form-control" value="{{$totalGame->ip_check}}"></div>
+                                    </div>
+                                    <div class="row form-group">
                                         <div class="col col-md-3"><label for="text-input" class=" form-control-label">Quyền copy</label></div>
                                         <div class="col-12 col-md-9">
                                             <select class="form-control" name="copy">
