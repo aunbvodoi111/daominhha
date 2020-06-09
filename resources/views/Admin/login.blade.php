@@ -35,7 +35,7 @@
         <div class="container">
             <div class="login-content">
                 <div class="login-logo">
-                    <a href="index.html">
+                    <a href="/">
                         <img class="align-content" src="images/logo.png" alt="">
                     </a>
                 </div>
@@ -52,7 +52,7 @@
                     </div>  
                 @endif
                 <div class="login-form">
-                    <form action="{{asset('admin/login')}}" method="post">
+                    <form action="{{asset('admin/loginAdmin')}}" method="post">
                         {{csrf_field()}}
                         <div class="form-group">
                             <label>Nhập địa chỉ Email</label>

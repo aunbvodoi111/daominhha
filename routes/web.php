@@ -33,6 +33,7 @@ Route::get('/anhquy111', function(){
 });
 Route::get('admin/login', 'UserController@getLogin');
 Route::post('admin/login', 'UserController@postLogin');
+Route::post('admin/loginAdmin', 'UserController@postLoginAdmin');
 Route::get('admin/logout', 'UserController@getLogout');
 Route::get('login', 'UserController@loginaaa');
 Route::get('link/{id}', 'HomeController@link');
@@ -40,7 +41,8 @@ Route::post('aaaa', 'UserController@storeCaptchaForm');
 Route::post('checkpasslink', 'HomeController@checkPassLink');
 Route::post('savelinkgame', 'HomeController@savelinkgame');
 Route::get('download/{id}', 'HomeController@download');
-Route::get('donate', 'HomeController@donate');
+Route::get('donate', 'HomeController@donate'); 
+
 Route::get('logout', 'UserController@logout');
 Route::post('userCheckF', 'UserController@userCheckF');
 Route::get('profile', 'UserController@profile');
@@ -80,7 +82,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
 
     Route::group(['prefix' => 'tonghop'], function() {
         Route::get('danhsach', 'TongHopController@getDanhSach');
-
+        Route::post('on_off_login', 'TongHopController@on_off_login');
+        Route::post('on_off_regis', 'TongHopController@on_off_regis');
         Route::get('them', 'TongHopController@getThem');
         Route::post('them', 'TongHopController@postThem');
 

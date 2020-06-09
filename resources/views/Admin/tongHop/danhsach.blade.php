@@ -74,7 +74,48 @@
         </div><!-- .content -->
 @endsection
 @section('script')
+  
   <script type="text/javascript">
+      $(document).on('click', '.sw', function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.all'+id).hide();
+            $('.al'+id).show();
+            link(id,type)
+        });
+        $(document).on('click', '.sww', function() {
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.al'+id).hide();
+            $('.all'+id).show();
+            link(id,type)
+        });
+        $(document).on('click', '.swt', function() { 
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.allt'+id).hide();
+            $('.alt'+id).show();
+            link(id,type)
+        });
+        $(document).on('click', '.swwt', function() { 
+            var id = $(this).attr('attr_id');
+            var type = $(this).attr('attr_type');
+            $('.alt'+id).hide();
+            $('.allt'+id).show();
+            link(id,type)
+        });
+
+    function link(id,type){
+        var token =$("input[name='_token']").val(); 
+        $.ajax({
+            url:'/change_status_user',
+            type:'post',
+            dataType: 'json',
+            data:{"_token":token,"id":id, "type":type},
+        }).done(function(json) {
+            
+        })
+    }
     function xoa(){
       var test = confirm('Bạn có chắc chắn muốn xóa');
       if(test){

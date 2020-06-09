@@ -17,7 +17,11 @@ class AdminLoginMiddleware
     public function handle($request, Closure $next)
     {
         if(Auth::check()){
-            return $next($request);
+           if(Auth::user()->role == 3){
+                return $next($request);
+           }else{
+            return redirect('/');
+           }
         }
         else{
             return redirect('admin/login');

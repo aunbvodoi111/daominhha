@@ -159,9 +159,9 @@
                         <p>
                             @foreach ($items->list as $key => $prod)
                                 @if(count($items->list) > 1)
-                                    <a href="download/{{$prod->code}}"  target="_blank">Part {{$key + 1}}</a>
+                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
                                 @else
-                                    <a href="download/{{$prod->code}}"  target="_blank">Download</a>
+                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
                                 @endif
                                 {{-- <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a> --}}
                             @endforeach
@@ -188,9 +188,9 @@
                     <p>
                         @foreach ($items->list as $key => $prod)
                             @if(count($items->list) > 1)
-                                <a href="download/{{$prod->code}}"  target="_blank">Part {{$key + 1}}</a>
+                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
                             @else
-                                <a href="download/{{$prod->code}}"  target="_blank">Download</a>
+                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
                             @endif
                         @endforeach
                     </p>
@@ -200,7 +200,7 @@
                     <h3>{{$items->title}}</h3>
                     <p class="yellow">{{$items->link}}:</p>
                     <h5>{{$items->list_type->link}}:</h5>
-                    <a href="download/"  target="_blank">Hiện tại link đã bị khóa</a>
+                    <a href="javascript:void(0)"  target="_blank">Hiện tại link đã bị khóa</a>
                 @endif
             @endif
         @endforeach
@@ -214,9 +214,10 @@
                 <p>
                     @foreach ($items->list as $key => $prod)
                         @if(count($items->list) > 1)
-                            <a href="download/{{$prod->code}}"  target="_blank">Part {{$key + 1}}</a>
+                            <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
                         @else
-                            <a href="download/{{$prod->code}}"  target="_blank">Download</a>
+                            <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
+                            
                         @endif
                     @endforeach
                 </p>
@@ -464,7 +465,7 @@
     $(document).ready(function(){
         $('.alert').click(function(){
             var id = $(this).attr('attr_id')
-            $('.link-re').attr('href','/download/'+ id)
+            $('.link-re').attr('href','https://toplinkvip.com/download/'+ id)
 
         });
     });

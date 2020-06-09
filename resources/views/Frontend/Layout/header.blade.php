@@ -251,7 +251,7 @@
                         </div>
                     </div>
                @else
-                    <p style="margin-right: 20px;cursor:pointer;"><i class="fas fa-user" data-toggle="modal" data-target="#exampleModallo"></i></p>
+                    <p style="margin-right: 20px;cursor:pointer;" @if($totalGame->close_login == 0)  class="anhquy" @endif><i class="fas fa-user"  data-target="#exampleModallo"  @if($totalGame->close_login == 1)  data-toggle="modal" @endif></i></p>
                @endif
             </ul>
         </div>
@@ -315,38 +315,39 @@
             </div>
         </div>
     </nav>
-    <div class="modal fade" id="exampleModallo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog" role="document">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h5 class="modal-title" id="exampleModalLabel"><span style="color:red">Đăng</span> nhập</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-            <div class="modal-body">
-              <form>
-                @csrf
-                <div class="form-group">
-                  <label for="recipient-name" class="col-form-label">Email:</label>
-                  <input type="email" class="form-control emaillg" id="recipient-name">
+    @if($totalGame->close_login == 1)
+        <div class="modal fade" id="exampleModallo" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel"><span style="color:red">Đăng</span> nhập</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
                 </div>
-                <div class="form-group">
-                    <label for="recipient-name" class="col-form-label">Password:</label>
-                    <input type="password" class="form-control passwordlg" id="recipient-name">
-                  </div>
-              </form>
-              <p><a href="/ForgotPassword">Quên mật khẩu</a></p>
-              <p style="margin-top:-10px;"><a href="/login" >Đăng kí thành viên</a></p>
+                <div class="modal-body">
+                <form>
+                    @csrf
+                    <div class="form-group">
+                    <label for="recipient-name" class="col-form-label">Email:</label>
+                    <input type="email" class="form-control emaillg" id="recipient-name">
+                    </div>
+                    <div class="form-group">
+                        <label for="recipient-name" class="col-form-label">Password:</label>
+                        <input type="password" class="form-control passwordlg" id="recipient-name">
+                    </div>
+                </form>
+                <p><a href="/ForgotPassword">Quên mật khẩu</a></p>
+                <p style="margin-top:-10px;"><a href="/login" >Đăng kí thành viên</a></p>
+                </div>
+                <div class="modal-footer">
+                <button type="button" class="nk-btn nk-btn-color-primary" data-dismiss="modal">Đóng</button>
+                <button type="button" class="nk-btn nk-btn-outline nk-btn-color-success" id="loginpop">Đăng nhập</button>
+                </div>
             </div>
-            <div class="modal-footer">
-              <button type="button" class="nk-btn nk-btn-color-primary" data-dismiss="modal">Đóng</button>
-              <button type="button" class="nk-btn nk-btn-outline nk-btn-color-success" id="loginpop">Đăng nhập</button>
             </div>
-          </div>
         </div>
-      </div>
-
+      @endif
       <div class="modal fade" id="exampleModalseen" tabindex="-1" role="dialog" aria-labelledby="exampleModalseen" aria-hidden="true">
         <div class="modal-dialog" role="document">
           <div class="modal-content">
@@ -437,6 +438,9 @@
         }
     });
     $(document).ready(function(){
+        $('.anhquy').click(function(){
+            swal('warning', 'Chức năng đăng nhập đã bị Admin tắt. Xin cảm ơn!', 'warning')
+        })
         $('#register').click(function(){
             var name =$('.name').val();
             var email =$('.email').val();

@@ -91,15 +91,20 @@ class UserController extends Controller
         return view('Admin.login');
     }
 
-    // public function postLogin(Request $request){
-    //     $this->validate($request, ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
-    //     if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-    //         return redirect('admin/games/danhsach');
-    //     }
-    //     else {
-    //         return redirect('admin/login')->with('thongbao', 'Email hoặc mật khẩu không đúng');
-    //     }
-    // }
+    public function postLoginAdmin(Request $request){
+        $this->validate($request, ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
+		$user = User::where('email',$request->email)->first();
+		if($user->role == 3){
+			if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+				return redirect('admin/games/danhsach');
+			}
+			else {
+				return redirect('admin/login')->with('thongbao', 'Email hoặc mật khẩu không đúng');
+			}
+		}else{
+			return redirect('admin/login')->with('thongbao', 'Bạn không có quyền truy cập trang này xin cảm ơn');
+		}
+    }
 
 	public function postLogin(Request $request){
 		$validator = Validator::make($request->all(), ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
