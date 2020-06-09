@@ -114,40 +114,41 @@ class UserController extends Controller
 						$check = 1;
 					}
 				}
-				
-				if(count($ip) < ($ip_check->ip_check)){
-					if($check == 0){
-						$ipAdd = new UserIp;
-						$ipAdd->ip_user = \Request::ip();
-						$ipAdd->id_user = $user->id;
-						$ipAdd->save();
-						if($user->active_mail == 0){
-							return response()->json(['er1'=>'Added new records.']);
-						}else if($user->active == 0){
-							return response()->json(['er2'=>'Added new records.']);
-						}else{
-							if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-								return response()->json(['success'=>'Added new records.']);
+				if($check == 0){
+					if(count($ip) < ($ip_check->ip_check)){
+						if($check == 0){
+							$ipAdd = new UserIp;
+							$ipAdd->ip_user = \Request::ip();
+							$ipAdd->id_user = $user->id;
+							$ipAdd->save();
+							if($user->active_mail == 0){
+								return response()->json(['er1'=>'Added new records.']);
+							}else if($user->active == 0){
+								return response()->json(['er2'=>'Added new records.']);
 							}else{
-								return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+								if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+									return response()->json(['success'=>'Added new records.']);
+								}else{
+									return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+								}
 							}
 						}
-					}elseif($check == 1){
-						if($user->active_mail == 0){
-							return response()->json(['er1'=>'Added new records.']);
-						}else if($user->active == 0){
-							return response()->json(['er2'=>'Added new records.']);
+						
+					}else{
+						return response()->json(['errorIp'=>'Added new records.']);
+					}
+				}else if($check == 1){
+					if($user->active_mail == 0){
+						return response()->json(['er1'=>'Added new records.']);
+					}else if($user->active == 0){
+						return response()->json(['er2'=>'Added new records.']);
+					}else{
+						if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+							return response()->json(['success'=>'Added new records.']);
 						}else{
-							if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-								return response()->json(['success'=>'Added new records.']);
-							}else{
-								return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
-							}
+							return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
 						}
 					}
-					
-				}else{
-					return response()->json(['errorIp'=>'Added new records.']);
 				}
 			}else{
 				return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
