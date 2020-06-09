@@ -34,8 +34,7 @@
         </div>
         </form>
         <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-            <input type="submit" value="Register" class="register"/>
+            <input type="submit" value="Đồng ý" class="register nk-btn nk-btn-rounded nk-btn-color-dark-3 nk-btn-hover-color-info"/>
         </div>
         </div>
         

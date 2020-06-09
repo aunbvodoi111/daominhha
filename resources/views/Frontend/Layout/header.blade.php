@@ -262,13 +262,13 @@
     .modal-backdrop{
         display: none;
     }
-</style>
+</style> 
     <nav class="nk-navbar nk-navbar-top nk-navbar-sticky nk-navbar-autohide">
         <div class="container">
             <div class="nk-nav-table">
                 
                 <a href="{{asset('/')}}" class="nk-nav-logo">
-                    <img src="assets/images/logo.png" alt="GoodGames" width="199">
+                    <img src="assets/images/logonew.svg" alt="GoodGames" width="199">
                 </a>
                 
                 <ul class="nk-nav nk-nav-right d-none d-lg-table-cell" data-nav-mobile="#nk-nav-mobile">
@@ -340,8 +340,8 @@
               <p style="margin-top:-10px;"><a href="/login" >Đăng kí thành viên</a></p>
             </div>
             <div class="modal-footer">
-              <button type="button" class="btn btn-secondary" data-dismiss="modal">Đóng</button>
-              <button type="button" class="btn btn-primary" id="loginpop">Đăng nhập</button>
+              <button type="button" class="nk-btn nk-btn-color-primary" data-dismiss="modal">Đóng</button>
+              <button type="button" class="nk-btn nk-btn-outline nk-btn-color-success" id="loginpop">Đăng nhập</button>
             </div>
           </div>
         </div>
@@ -405,12 +405,15 @@
                         $('.passwordre').val('');
                         $('.emailre').val('');
                         $('.password_confirmedre').val('');
-                        setTimeout(function(){ window.location.href = '/' }, 1200);
+                        setTimeout(function(){ window.location.href = '/' }, 1000);
                     }
                     else if(data.er1){
                         swal('Lỗi đăng nhập','Bạn chưa xác nhận email cho tải khoản này','error')
                     }else if(data.er2){
                         swal('Lỗi đăng nhập','Bạn vui lòng liên hệ với https://www.facebook.com/DaominhhaTaiGameMienPhi để được kích hoạt tài khoản','error')
+                    }
+                    else if(data.errorIp){
+                        swal('Lỗi đăng nhập','Tài khoản của bạn đã đăng nhập quá nhiều nơi. Vui lòng liên hệ Admin để biết','error')
                     }
                     else if(data.errorr){
                         swal('Lỗi đăng nhập','Vui lòng kiểm tra lại tải khoản mật khẩu','error')
@@ -487,7 +490,7 @@
         font-weight: 600;
         border-radius: 100% !important;
         color: #fff !important;
-        background-color: black !important;
+        background-color: #171e22 !important;
         border: none !important;
         display: block !important;
     }

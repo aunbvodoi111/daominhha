@@ -14,6 +14,7 @@ use App\Mail\SendMailable;
 use Validator;
 use App\totalGame;
 use View;
+use App\UserIp;
 class UserController extends Controller
 {
 	//
@@ -102,20 +103,55 @@ class UserController extends Controller
 
 	public function postLogin(Request $request){
 		$validator = Validator::make($request->all(), ['email' => 'required|email', 'password' => 'required|'], ['email.required' => 'Email không được để trống', 'email.email' => 'Email không hợp lệ', 'password.required' => 'Password không được để trống']);
-	
+			$ip_check = totalGame::where('id',1)->first();
 			$user = User::where('email',$request->email)->first();
-			if($user->active_mail == 0){
-				return response()->json(['er1'=>'Added new records.']);
-			}else if($user->active == 0){
-				return response()->json(['er2'=>'Added new records.']);
-			}else{
-				if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
-					return response()->json(['success'=>'Added new records.']);
-				}else{
-					return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+			if($user){
+				$check = 0;
+				$ip = UserIp::where('id_user',$user->id)->get();
+				// dd(count($ip));
+				foreach($ip as $name){
+					if($name->ip_user == \Request::ip()){
+						$check = 1;
+					}
 				}
+				
+				if(count($ip) < ($ip_check->ip_check)){
+					if($check == 0){
+						$ipAdd = new UserIp;
+						$ipAdd->ip_user = \Request::ip();
+						$ipAdd->id_user = $user->id;
+						$ipAdd->save();
+						if($user->active_mail == 0){
+							return response()->json(['er1'=>'Added new records.']);
+						}else if($user->active == 0){
+							return response()->json(['er2'=>'Added new records.']);
+						}else{
+							if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+								return response()->json(['success'=>'Added new records.']);
+							}else{
+								return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+							}
+						}
+					}elseif($check == 1){
+						if($user->active_mail == 0){
+							return response()->json(['er1'=>'Added new records.']);
+						}else if($user->active == 0){
+							return response()->json(['er2'=>'Added new records.']);
+						}else{
+							if(Auth::attempt(['email'=>$request->email, 'password' => $request->password], $request->has('remember'))){
+								return response()->json(['success'=>'Added new records.']);
+							}else{
+								return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
+							}
+						}
+					}
+					
+				}else{
+					return response()->json(['errorIp'=>'Added new records.']);
+				}
+			}else{
+				return response()->json(['errorr'=>'Vui lòng kiểm tra lại tải khoản mật khẩu']);
 			}
-		
             return response()->json(['error'=>$validator->errors()->all()]);
         
     }

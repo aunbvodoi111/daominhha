@@ -35,7 +35,6 @@ class HomeController extends Controller
     
 
     public function getHome(){
-        
         $games = GamesModel::select('id', 'Name', 'AnhChinh', 'Avatar', 'TenKhongDau', 'TheLoai', 'SoLuotXem', 'MoTa', 'AnhMini', 'created_at')->orderBy('CurrentTime', 'desc')->where('id','!=',997)->where('id','!=',8)->where('id','!=',40)->where('id','!=',80)->take(20)->get();
         $gamehot = GamesModel::select('id', 'Name', 'Avatar', 'TenKhongDau', 'MoTa', 'AnhMini', 'created_at')->where('id',601)->orwhere('id',2151)->orwhere('id',2172)->orwhere('id',2239)->orwhere('id',13)->orderBy('id','desc')->get();
         $gametop = GamesModel::select('id', 'Name', 'AnhChinh', 'Avatar', 'TenKhongDau', 'TheLoai', 'SoLuotXem', 'MoTa', 'AnhMini', 'created_at')->where('id',1784)->orwhere('id',40)->orwhere('id',8)->orwhere('id',997)->orderBy('id','desc')->get();
@@ -148,7 +147,7 @@ class HomeController extends Controller
                 if($id == 1){
                     return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
                 }else{
-                    return redirect('/');
+                    return view('Frontend.Pages.checkAuthDownload',compact('background'));
                 } 
             }else{
                 return redirect('/login');

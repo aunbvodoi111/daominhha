@@ -45,7 +45,7 @@
         <div class="container nk-copyright" style="padding: 25px 0px 25px 10px">
             <div class="row">
                 <div class="col-6">
-                    Copyright &copy; 2019 <a href="https://themeforest.net/user/_nk?ref=_nK" target="_blank">Đào Minh Hà</a>
+                    Copyright &copy; 2018 - <span id="year"></span>  <a href="https://themeforest.net/user/_nk?ref=_nK" target="_blank"> Đào Minh Hà</a>
                 </div>
                 <div class="col-3">
                     <a href="//www.dmca.com/Protection/Status.aspx?ID=72b77a38-4faa-485b-9d88-91581f221658" title="DMCA.com Protection Status" class="dmca-badge"> <img src ="https://images.dmca.com/Badges/dmca_protected_sml_120l.png?ID=72b77a38-4faa-485b-9d88-91581f221658"  alt="DMCA.com Protection Status" /></a>  <script src="https://images.dmca.com/Badges/DMCABadgeHelper.min.js"> </script>
@@ -279,6 +279,9 @@
     
 </script>
 <script>
+    var d = new Date();
+    var n = d.getFullYear();
+    document.getElementById("year").innerHTML = n;
     $(document).ready(function(){
         $('#addcontact').click(function(){
             var name =$('.name').val();
