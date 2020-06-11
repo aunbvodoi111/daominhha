@@ -107,23 +107,20 @@
     @if ( \Auth::user())
         @if ( $id_loaded == 0)
             @foreach ($games->link_list as $key => $items)
+            
                 @if ( $items->list_type->link_ori == 0)
                     @if ( $items->type == 1)
                     <h3>{{$items->title}}</h3>
                     <p class="yellow">{{$items->link}}</p>
                     <h5>{{$items->list_type->link}}</h5>
                         <div class="tt">
-                            @foreach ($items->list as $key => $prod)
-                           
+                            @if($items->havelink == 1)
+                                @foreach ($items->list as $key => $prod)
                                     @if (  ($totalGame->sogame)-count($link_loaded->link_loaded) < ($totalGame->sogame) && ($totalGame->sogame)-count($link_loaded->link_loaded) > 0)
-                                        {{-- <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}" target="_blank">Part {{$key + 1}}</a> --}}
                                         @if(count($items->list) > 1)
                                             <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}" target="_blank">Part {{$key + 1}}</a>
-                                            {{-- <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p> --}}
                                         @else
                                             <a  class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}" target="_blank"> Download</a>
-                                            {{-- <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Download</p> --}}
-                                            {{-- <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Download</p> --}}
                                         @endif
                                     @elseif(count($link_loaded->link_loaded) == 0)
                                         @if(count($items->list)  > 1)
@@ -131,18 +128,17 @@
                                         @else
                                             <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</p>
                                         @endif
-                                        {{-- <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Part {{$key + 1}}</p> --}}
                                     @elseif ( ($totalGame->sogame)-count($link_loaded->link_loaded) == 0)
                                         @if(count($items->list) > 1)
                                             <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Part {{$key + 1}}</p>
                                         @else
                                             <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</p>
-                                            {{-- <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->id}}">Download</p> --}}
                                         @endif
-                                        
-                                    @endif
-                                
-                            @endforeach
+                                    @endif    
+                                @endforeach
+                            @else
+                                <p>{{$items->reason_havelink}}</p>
+                            @endif
                         </div>
                     @endif
                 @else
@@ -162,14 +158,18 @@
                         <p class="yellow">{{$items->link}}</p>
                         <h5>{{$items->list_type->link}}</h5>
                         <p>
-                            @foreach ($items->list as $key => $prod)
-                                @if(count($items->list) > 1)
-                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
-                                @else
-                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
-                                @endif
-                                {{-- <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a> --}}
-                            @endforeach
+                            @if($items->havelink == 1)
+                                @foreach ($items->list as $key => $prod)
+                                    @if(count($items->list) > 1)
+                                        <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
+                                    @else
+                                        <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
+                                    @endif
+                                    {{-- <a href="download/{{$prod->id}}"  target="_blank">Part {{$key + 1}}</a> --}}
+                                @endforeach
+                            @else
+                                <p>{{$items->reason_havelink}}</p>
+                            @endif
                         </p>
                     @endif
                 @endif
@@ -191,13 +191,17 @@
                     <h5>{{$items->link}}</h5>
                     <h5>{{$items->list_type->link}}:</h5>
                     <p>
-                        @foreach ($items->list as $key => $prod)
-                            @if(count($items->list) > 1)
-                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
-                            @else
-                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
-                            @endif
-                        @endforeach
+                        @if($items->havelink == 1)
+                            @foreach ($items->list as $key => $prod)
+                                @if(count($items->list) > 1)
+                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
+                                @else
+                                    <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
+                                @endif
+                            @endforeach
+                        @else
+                            <p>{{$items->reason_havelink}}</p>
+                        @endif
                     </p>
                 @endif
             @else
@@ -217,14 +221,18 @@
                     <p class="yellow">{{$items->link}}:</p>
                     <h5>{{$items->list_type->link}}:</h5>
                 <p>
-                    @foreach ($items->list as $key => $prod)
-                        @if(count($items->list) > 1)
-                            <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
-                        @else
-                            <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
-                            
-                        @endif
-                    @endforeach
+                    @if($items->havelink == 1)
+                        @foreach ($items->list as $key => $prod)
+                            @if(count($items->list) > 1)
+                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Part {{$key + 1}}</a>
+                            @else
+                                <a href="{{asset('download/'.$prod->code)}}"  target="_blank">Download</a>
+                                
+                            @endif
+                        @endforeach
+                    @else
+                        <p>{{$items->reason_havelink}}</p>
+                    @endif
                 </p>
             @endif
         @endif

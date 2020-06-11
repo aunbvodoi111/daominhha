@@ -7,7 +7,7 @@ use App\GamesModel;
 use App\TheLoaiModel;
 use App\TagModel;
 use App\User;
-use App\Link_List;
+use App\Link_list;
 use App\Linkhide;
 use DB;
 use App\totalGame;
@@ -132,7 +132,7 @@ class HomeController extends Controller
     public function link($id){
         $background = 1;
         $totalGame = totalGame::find(1);
-        $data = Link_List::where('code',$id)->first();
+        $data = Link_list::where('code',$id)->first();
         // dd();
         if($data->title_link->type_link && $data->title_link->type == 1){
             if(\Auth::user()){
@@ -160,7 +160,7 @@ class HomeController extends Controller
     
     public function checkPassLink(Request $request){
         $background = 1;
-        $data = Link_List::find($request['name']);
+        $data = Link_list::find($request['name']);
         $validator = \Validator::make($request->all(), [
             'code' => 'required',
         ]);

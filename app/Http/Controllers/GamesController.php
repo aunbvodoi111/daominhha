@@ -26,10 +26,9 @@ class GamesController extends Controller
     	return view('Admin.Games.danhsach', ['games' => $games]);
     }
 
-    public function getThem(){
-		$theloai = TheLoaiModel::all();
-		$listType = List_Type::all();
-    	return view('Admin.Games.them',compact('theloai','listType'));
+    public function getThem(Tag $tag){
+    	$theloai = TheLoaiModel::all();
+    	return view('Admin.Games.them', ['theloai' => $theloai, 'tag' => $tag]);
     }
 	public function tagList(Tag $tag){
 		$TheLoaiModel = TheLoaiModel::all();
@@ -38,67 +37,153 @@ class GamesController extends Controller
         ]);
 	}
 
+	public function getAddlink($id){
+		$theloai = TheLoaiModel::all();
+		$listType = List_Type::all();
+    	return view('Admin.Games.addlink',compact('theloai','listType','id'));
+	}
 
+	public function getEditlink($id){
+		$theloai = TheLoaiModel::all();
+		$games = GamesModel::where('id',$id)->with('link_list.list')->with('games_tag.tag_theloai')
+		->first();
+		
+		unset($games->NoiDung);
+		unset($games->Name);
+		unset($games->games_tag);
+		unset($games->GioiThieu);
+		unset($games->LinkGame);
+		$theloai = TheLoaiModel::all();
+		$listType = List_Type::all();
 	
-    public function postThem(Request $request, Tag $tag){
-		// dd($request->all());
-    	// $this->validate($request, ['Name' => 'required|unique:games,Name', 'TheLoai' => 'required', 'KichThuoc' => 'required', 'SoPart' => 'required', 'AnhChinh' => 'required', 'AnhPhu1' => 'required', 'AnhPhu2' => 'required', 'AnhPhu3' => 'required', 'AnhPhu4' => 'required', 'GioiThieu' => 'required', 'LinkGame' => 'required'], ['Name.required' => 'Tên game không được để trống', 'Name.unique' => 'Tên game đã bị trùng', 'TheLoai.required' => 'Thể loại không được để trống', 'KichThuoc.required' => 'Kích thước không được để trống', 'SoPart.required' => 'Số part không được để trống', 'AnhChinh.required' => 'Ảnh chính không được để trống', 'AnhPhu1.required' => 'Ảnh phụ 1 không được để trống', 'AnhPhu2.required' => 'Ảnh phụ 2 không được để trống', 'AnhPhu3.required' => 'Ảnh phụ 3 không được để trống', 'AnhPhu4.required' => 'Ảnh phụ 4 không được để trống', 'GioiThieu.required' => 'Giới thiệu không được để trống', 'LinkGame.required' => 'Link game không được để trống']);
 		
-		$games = new GamesModel;
-    	$games->Name = $request->game['Name'];
-        $games->TenKhongDau = str_slug($request->game['Name']);
-    	$games->TheLoai = $request->game['TheLoai'];
-    	$games->KichThuoc = $request->game['KichThuoc'];
-    	$games->SoPart = $request->game['SoPart'];
-        $games->Series = $request->game['Series'];
-        $games->Email = $request->game['Email'];
-        $games->MoTa = 1;
-		$games->Avatar = $request->game['Avatar'];
-    	$games->AnhChinh = $request->game['AnhChinh'];
-    	$games->AnhPhu1 = $request->game['AnhPhu1'];
-    	$games->AnhPhu2 = $request->game['AnhPhu2'];
-    	$games->AnhPhu3 = $request->game['AnhPhu3'];
-		$games->AnhPhu4 = $request->game['AnhPhu4'];
-		$games->AnhMini = $request->game['AnhMini'];
-    	$games->GioiThieu = $request->game['GioiThieu'];
-    	$games->NoiDung = $request->game['NoiDung'];
-		$games->LinkGame = 0;
-		if ($request->game['CapNhat'] == "Co") {
-            $games->CurrentTime = date('Y-m-d H:i:s');
+    	return view('Admin.Games.editlink', ['games' => $games, 'theloai' => $theloai, 'listType' => $listType]);
+		
+	}
+	
+	public function postEditlink(Request $request,$id){
+		$games = GamesModel::find($id);
+		foreach ($request->listTagName['link_list'] as $data) {
+				
+			$titleLink = TitleLink::where('id_product',$games->id)->first();
+			
+			if($titleLink != null){
+				$titleLink->delete();
+			}
 		}
-		$games->save();
-		
+		foreach ($request->listTagName['link_list'] as $data) { 
+			if($data['check'] == 0){
+				if($data['havelink'] == 1){
+					$titleLink = new TitleLink;
+					$titleLink->link  = $data['link'];
+					$titleLink->title  = $data['title'];
+					$titleLink->type  = $data['type'];
+					$titleLink->id_product  = $games->id;
+					$titleLink->havelink  = $data['havelink'];
+					$titleLink->type_link  = $data['type_link'];
+					$titleLink->save();
+					foreach ($data['list'] as $item) {
+						if($item['check'] == 0){
+							$linkList = new Link_list;
+							$linkList->link  = $item['link'];
+							$linkList->type  = 1;
+							$linkList->id_title  = $titleLink->id;
+							$linkList->code  = $this->generateRandomString(10).'-'.$this->generateRandomString(5).'-'.$this->generateRandomString(8).'-'.$this->generateRandomString(11);
+							$linkList->save();
+						}
+					}
+				}else{
+						$titleLink = new TitleLink;
+						$titleLink->reason_havelink  = $data['reason_havelink'];
+						$titleLink->type  = $data['type'];
+						$titleLink->title  = $data['title'];
+						$titleLink->havelink  = $data['havelink'];
+						$titleLink->id_product  = $games->id;
+						$titleLink->type_link  = $data['type_link'];
+						$titleLink->save();
+				}
+			}
+		}
+
+		return response()->json(['success'=>'Added new records']);
+	}
+	
+	public function postAddlink(Request $request,$id){
+		$games = GamesModel::find($id);
 		if(isset($request->data)){
 			foreach ($request->data as $data) {
-				
-				$titleLink = new TitleLink;
-				$titleLink->link  = $data['title'];
-				$titleLink->title  = $data['titleMain'];
-				$titleLink->type  = $data['type'];
-				$titleLink->id_product  = $games->id;
-				$titleLink->type_link  = $data['typelink'];
-				$titleLink->save();
-				foreach ($data['childLink'] as $item) {
-					$linkList = new Link_list;
-					$linkList->link  = $item['link'];
-					$linkList->type  = 1;
-					$linkList->id_title  = $titleLink->id;
-					$linkList->code  = $this->generateRandomString(10).'-'.$this->generateRandomString(5).'-'.$this->generateRandomString(8).'-'.$this->generateRandomString(11);
-					$linkList->save();
+				if($data['havelink'] == 1){
+					$titleLink = new TitleLink;
+					$titleLink->link  = $data['title'];
+					$titleLink->title  = $data['titleMain'];
+					$titleLink->type  = $data['type'];
+					$titleLink->havelink  = $data['havelink'];
+					$titleLink->id_product  = $games->id;
+					$titleLink->type_link  = $data['typelink'];
+					$titleLink->save();
+					foreach ($data['childLink'] as $item) {
+						$linkList = new Link_list;
+						$linkList->link  = $item['link'];
+						$linkList->type  = 1;
+						$linkList->id_title  = $titleLink->id;
+						$linkList->code  = $this->generateRandomString(10).'-'.$this->generateRandomString(5).'-'.$this->generateRandomString(8).'-'.$this->generateRandomString(11);
+						$linkList->save();
+					}
+				}else{
+					
+					$titleLink = new TitleLink;
+					$titleLink->reason_havelink  = $data['title'];
+					$titleLink->type  = $data['type'];
+					$titleLink->title  = $data['titleMain'];
+					$titleLink->havelink  = $data['havelink'];
+					$titleLink->id_product  = $games->id;
+					$titleLink->type_link  = $data['typelink'];
+					$titleLink->save();
 				}
 			}
 		}
 		// dd($request['listTagName']);
-    	foreach ($request['listTagName'] as $anhquy) {
+
+		$id = $games->id;
+		return response()->json(['success'=>'Added new records']);
+	}
+
+	
+    public function postThem(Request $request, Tag $tag){
+    	$this->validate($request, ['Name' => 'required|unique:games,Name', 'TheLoai' => 'required', 'KichThuoc' => 'required', 'SoPart' => 'required', 'AnhChinh' => 'required', 'AnhPhu1' => 'required', 'AnhPhu2' => 'required', 'AnhPhu3' => 'required', 'AnhPhu4' => 'required', 'GioiThieu' => 'required', 'LinkGame' => 'required'], ['Name.required' => 'Tên game không được để trống', 'Name.unique' => 'Tên game đã bị trùng', 'TheLoai.required' => 'Thể loại không được để trống', 'KichThuoc.required' => 'Kích thước không được để trống', 'SoPart.required' => 'Số part không được để trống', 'AnhChinh.required' => 'Ảnh chính không được để trống', 'AnhPhu1.required' => 'Ảnh phụ 1 không được để trống', 'AnhPhu2.required' => 'Ảnh phụ 2 không được để trống', 'AnhPhu3.required' => 'Ảnh phụ 3 không được để trống', 'AnhPhu4.required' => 'Ảnh phụ 4 không được để trống', 'GioiThieu.required' => 'Giới thiệu không được để trống', 'LinkGame.required' => 'Link game không được để trống']);
+    	$games = new GamesModel;
+    	$games->Name = $request->Name;
+        $games->TenKhongDau = str_slug($request->Name);
+    	$games->TheLoai = $request->TheLoai;
+    	$games->KichThuoc = $request->KichThuoc;
+    	$games->SoPart = $request->SoPart;
+        $games->Series = $request->Series;
+        $games->Email = $request->Email;
+        $games->MoTa = $request->MoTa;
+        if ($request->CapNhat == "Co") {
+            $games->CurrentTime = date('Y-m-d H:i:s');
+		}
+		$games->Avatar = $request->Avatar;
+    	$games->AnhChinh = $request->AnhChinh;
+    	$games->AnhPhu1 = $request->AnhPhu1;
+    	$games->AnhPhu2 = $request->AnhPhu2;
+    	$games->AnhPhu3 = $request->AnhPhu3;
+		$games->AnhPhu4 = $request->AnhPhu4;
+		$games->AnhMini = $request->AnhMini;
+    	$games->GioiThieu = $request->GioiThieu;
+    	$games->NoiDung = $request->NoiDung;
+    	$games->LinkGame = $request->LinkGame;
+    	$games->save();
+    	foreach ($tag->items as $data) {
     		$themtag = new TagModel;
-    		$themtag->TagName = $anhquy['Name'].'-'.$games->Name;
-    		$themtag->id_TheLoai = $anhquy['id'];
+    		$themtag->TagName = $data['Name'].'-'.$games->Name;
+    		$themtag->id_TheLoai = $data['id'];
     		$themtag->id_Games = $games->id;
     		$themtag->save();
-		}
-		return response()->json(['success'=>'Added new records.']);
-    	// Session()->flush();
-    	// return redirect('admin/games/danhsach')->with('thongbao', 'Thêm thành công');
+    	}
+		Session()->flush();
+		$id = $games->id;
+    	return redirect('admin/games/addlink/'.$id )->with('thongbao', 'Thêm thành công');
     }
 
 	public function generateRandomString($length) {
@@ -116,9 +201,6 @@ class GamesController extends Controller
 		$games = GamesModel::where('id',$id)->with('link_list.list')->with('games_tag.tag_theloai')
 		->first();
 		
-		unset($games->NoiDung);
-		unset($games->GioiThieu);
-
 		$theloai = TheLoaiModel::all();
 		$listType = List_Type::all();
 	
@@ -127,65 +209,37 @@ class GamesController extends Controller
     }
 
     public function postSua(Request $request, $id){
-		// dd($request->all());
-    	// $this->validate($request, ['Name' => 'required|unique:games,Name,'.$id.',id', 'TheLoai' => 'required', 'KichThuoc' => 'required', 'SoPart' => 'required', 'AnhChinh' => 'required', 'AnhPhu1' => 'required', 'AnhPhu2' => 'required', 'AnhPhu3' => 'required', 'AnhPhu4' => 'required', 'GioiThieu' => 'required', 'LinkGame' => 'required'], ['Name.required' => 'Tên game không được để trống', 'Name.unique' => 'Tên game đã bị trùng', 'TheLoai.required' => 'Thể loại không được để trống', 'KichThuoc.required' => 'Kích thước không được để trống', 'SoPart.required' => 'Số part không được để trống', 'AnhChinh.required' => 'Ảnh chính không được để trống', 'AnhPhu1.required' => 'Ảnh phụ 1 không được để trống', 'AnhPhu2.required' => 'Ảnh phụ 2 không được để trống', 'AnhPhu3.required' => 'Ảnh phụ 3 không được để trống', 'AnhPhu4.required' => 'Ảnh phụ 4 không được để trống', 'GioiThieu.required' => 'Giới thiệu không được để trống', 'LinkGame.required' => 'Link game không được để trống']);
+    	$this->validate($request, ['Name' => 'required|unique:games,Name,'.$id.',id', 'TheLoai' => 'required', 'KichThuoc' => 'required', 'SoPart' => 'required', 'AnhChinh' => 'required', 'AnhPhu1' => 'required', 'AnhPhu2' => 'required', 'AnhPhu3' => 'required', 'AnhPhu4' => 'required', 'GioiThieu' => 'required', 'LinkGame' => 'required'], ['Name.required' => 'Tên game không được để trống', 'Name.unique' => 'Tên game đã bị trùng', 'TheLoai.required' => 'Thể loại không được để trống', 'KichThuoc.required' => 'Kích thước không được để trống', 'SoPart.required' => 'Số part không được để trống', 'AnhChinh.required' => 'Ảnh chính không được để trống', 'AnhPhu1.required' => 'Ảnh phụ 1 không được để trống', 'AnhPhu2.required' => 'Ảnh phụ 2 không được để trống', 'AnhPhu3.required' => 'Ảnh phụ 3 không được để trống', 'AnhPhu4.required' => 'Ảnh phụ 4 không được để trống', 'GioiThieu.required' => 'Giới thiệu không được để trống', 'LinkGame.required' => 'Link game không được để trống']);
     	$games = GamesModel::find($id);
-    	$games->Name = $request->listTagName['Name'];
-        $games->TenKhongDau = str_slug($request->listTagName['Name']);
-    	$games->TheLoai = $request->listTagName['TheLoai'];
-    	$games->KichThuoc = $request->listTagName['KichThuoc'];
-    	$games->SoPart = $request->listTagName['SoPart'];
-        $games->Series = $request->listTagName['Series'];
-        $games->Email = $request->listTagName['Email'];
-        $games->MoTa = 1;
-        if ($request->listTagName['CurrentTime'] == "Co") {
+    	$games->Name = $request->Name;
+        $games->TenKhongDau = str_slug($request->Name);
+    	$games->TheLoai = $request->TheLoai;
+    	$games->KichThuoc = $request->KichThuoc;
+    	$games->SoPart = $request->SoPart;
+        $games->Series = $request->Series;
+        $games->Email = $request->Email;
+        $games->MoTa = $request->MoTa;
+        if ($request->CapNhat == "Co") {
             $games->CurrentTime = date('Y-m-d H:i:s');
 		}
-		$games->Avatar = $request->listTagName['Avatar'];
-    	$games->AnhChinh = $request->listTagName['AnhChinh'];
-    	$games->AnhPhu1 = $request->listTagName['AnhPhu1'];
-    	$games->AnhPhu2 = $request->listTagName['AnhPhu2'];
-    	$games->AnhPhu3 = $request->listTagName['AnhPhu3'];
-		$games->AnhPhu4 = $request->listTagName['AnhPhu4'];
-		$games->AnhMini = $request->listTagName['AnhMini'];
+		$games->Avatar = $request->Avatar;
+    	$games->AnhChinh = $request->AnhChinh;
+    	$games->AnhPhu1 = $request->AnhPhu1;
+    	$games->AnhPhu2 = $request->AnhPhu2;
+    	$games->AnhPhu3 = $request->AnhPhu3;
+		$games->AnhPhu4 = $request->AnhPhu4;
+		$games->AnhMini = $request->AnhMini;
+    	$games->GioiThieu = $request->GioiThieu;
+    	$games->NoiDung = $request->NoiDung;
+    	$games->LinkGame = $request->LinkGame;
         $tagcurent = TagModel::where('id_Games', $id)->get();
         foreach ($tagcurent as $data) {
             $data->TagName = $data->tag_theloai->Name.'-'.$request->Name;
             $data->save();
         }
 		$games->save();
-		foreach ($request->listTagName['link_list'] as $data) {
-				
-			$titleLink = TitleLink::where('id_product',$games->id)->first();
-			
-			if($titleLink != null){
-				$titleLink->delete();
-			}
-		}
-		foreach ($request->listTagName['link_list'] as $data) { 
-			$titleLink = new TitleLink;
-			$titleLink->link  = $data['link'];
-			$titleLink->title  = $data['title'];
-			$titleLink->type  = $data['type'];
-			$titleLink->id_product  = $games->id;
-			$titleLink->type_link  = $data['type_link'];
-			$titleLink->save();
-			foreach ($data['list'] as $item) {
-			
-				$linkList = new Link_list;
-				$linkList->link  = $item['link'];
-				$linkList->type  = 1;
-				$linkList->id_title  = $titleLink->id;
-				$linkList->code  = 1;
-				$linkList->save();
-			}
-		}
 		$id = $games->id;
-		return response([
-            'ordersDetail'=> 'Added new records',
-            'id' => $id
-        ]);
-		return response()->json(['success'=>'Added new records.'],['id'=> 20]);
+    	return redirect('admin/games/editlink/'.$id)->with('thongbao', 'Sửa thành công');
     } 
 
     public function getXoa($id){
@@ -228,4 +282,16 @@ class GamesController extends Controller
         ]);
 	}
 	
+	public function getThemDetail($id){
+		$games = GamesModel::find($id);
+		return view('Admin.Games.updateDetail',compact('games'));
+	}
+
+	public function postThemDetail(Request $request,$id){
+		$games = GamesModel::find($id);
+		$games->GioiThieu = $request->GioiThieu;
+		$games->NoiDung = $request->NoiDung;
+		$games->save();
+		return redirect('admin/games/themdetail/'.$id)->with('thongbao', 'Sửa thành công');
+	}
 }

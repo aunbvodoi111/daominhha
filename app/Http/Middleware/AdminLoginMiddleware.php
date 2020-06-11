@@ -20,7 +20,7 @@ class AdminLoginMiddleware
            if(Auth::user()->role == 3){
                 return $next($request);
            }else{
-            return redirect('/');
+                return redirect('/');
            }
         }
         else{

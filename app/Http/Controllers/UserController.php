@@ -228,6 +228,7 @@ class UserController extends Controller
 			);
 			$user->remember_token = $name['code'];
 			$user->save();
+			Mail::to($user->email)->send(new SendMailable($user));
 			// Mail::to('phamquycntta@gmail.com')->send(new SendMailable($user));
 			return response()->json(['success'=>'Added new records.']);
         }
@@ -271,7 +272,7 @@ class UserController extends Controller
 			// }
 
 			$user->data = $newData;
-			Mail::to('phamquycntta@gmail.com')->send(new ForgetMailable($user));
+			Mail::to($user->email)->send(new ForgetMailable($user));
 			// dd('sdaaaaa');
 			// event('user.password', [$newData, $user]);
 			

@@ -74,7 +74,6 @@
                                 <td>{{date('d-m-Y', strtotime($items->created_at))}}</td>
                                 <td>
                                   <a href="{{asset('admin/games/sua/'.$items->id)}}"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Sửa</button></a>
-                                  <a href="{{asset('admin/games/editlink/'.$items->id)}}"><button type="button" class="btn btn-success"><i class="fa fa-plus"></i>&nbsp;Sửa Link</button></a>
                                   <a href="{{asset('admin/games/xoa/'.$items->id)}}" onclick="return xoa()"><button type="button" class="btn btn-danger"><i class="fa fa-times"></i>&nbsp;Xóa</button></a>
                                 </td>
                               </tr>

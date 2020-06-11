@@ -98,6 +98,14 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::get('linkmn', 'GamesController@getLinkmn');
         
         
+        Route::get('themdetail/{id}', 'GamesController@getThemDetail');
+        Route::post('themdetail/{id}', 'GamesController@postThemDetail');
+        Route::get('addlink/{id}', 'GamesController@getAddlink');
+        Route::post('addlink/{id}', 'GamesController@postAddlink');
+
+        Route::get('editlink/{id}', 'GamesController@getEditlink');
+        Route::post('editlink/{id}', 'GamesController@postEditlink');
+
         Route::get('them', 'GamesController@getThem');
         Route::get('tagList', 'GamesController@tagList');
         Route::post('them', 'GamesController@postThem');
