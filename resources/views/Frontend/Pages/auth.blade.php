@@ -70,7 +70,7 @@
             var email = $('.emailre').val();
             var password_confirmed = $('.password_confirmedre').val();
             $.ajax({
-                url: "/aaaa",
+                url: "https://toplinkvip.com/aaaa",
                 type:'POST',
                 data: {_token:_token, name:name, password:password, email:email, password_confirmed:password_confirmed, g_recaptcha_response: grecaptcha.getResponse()},
                 success: function(data) {
@@ -111,7 +111,7 @@
             var password = $('.passwordlg').val();
             var email = $('.emaillg').val();
             $.ajax({
-                url: "/admin/login",
+                url: "https://toplinkvip.com/admin/login",
                 type:'POST',
                 data: {_token:_token,password:password, email:email},
                 success: function(data) {

@@ -99,9 +99,7 @@
         <h6 style="color: cyan; margin-bottom: 30px;">Thông báo: Hiện tại Fan Page của mình đang bị khóa thế nên các bạn tham gia vào Group này nhé: <a href="https://www.facebook.com/groups/558374361208287/" style="color: red;" target="_blank">Click here</a></h6>
     </div>
     <div>
-        @if($games->LinkGame != '0')
-            {!! $games->LinkGame !!}
-        @endif
+        
     </div>
    <div class="tot">
     @if ( \Auth::user())
@@ -112,7 +110,7 @@
                     @if ( $items->type == 1)
                     <h3>{{$items->title}}</h3>
                     <p class="yellow">{{$items->link}}</p>
-                    <h5>{{$items->list_type->link}}</h5>
+                    <h5>{{$items->list_type->link}}:</h5>
                         <div class="tt">
                             @if($items->havelink == 1)
                                 @foreach ($items->list as $key => $prod)
@@ -124,15 +122,15 @@
                                         @endif
                                     @elseif(count($link_loaded->link_loaded) == 0)
                                         @if(count($items->list)  > 1)
-                                            <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Part {{$key + 1}}</p>
+                                            <a href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Part {{$key + 1}}</a>
                                         @else
-                                            <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</p>
+                                            <a href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</a>
                                         @endif
                                     @elseif ( ($totalGame->sogame)-count($link_loaded->link_loaded) == 0)
                                         @if(count($items->list) > 1)
-                                            <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Part {{$key + 1}}</p>
+                                            <a href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Part {{$key + 1}}</a>
                                         @else
-                                            <p href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</p>
+                                            <a href="" class="id-link alert" data-toggle="modal" data-target="#exampleModal" attr_id="{{$prod->code}}">Download</a>
                                         @endif
                                     @endif    
                                 @endforeach
@@ -145,7 +143,7 @@
                      @if ( $items->type == 1)
                         <h3>{{$items->title}}</h3>
                         <p class="yellow">{{$items->link}}</p>
-                        <h5>{{$items->list_type->link}}</h5>
+                        <h5>{{$items->list_type->link}}:</h5>
                         <a href="javascript:void(0)"  target="_blank">Hiện tại link đã bị khóa</a>
                      @endif
                 @endif
@@ -156,7 +154,7 @@
                     @if ( $items->type == 1)
                         <h3>{{$items->title}}</h3>
                         <p class="yellow">{{$items->link}}</p>
-                        <h5>{{$items->list_type->link}}</h5>
+                        <h5>{{$items->list_type->link}}:</h5>
                         <p>
                             @if($items->havelink == 1)
                                 @foreach ($items->list as $key => $prod)
@@ -184,7 +182,7 @@
                     <p class="yellow">{{$items->link}}</p>
                     <h5>{{$items->list_type->link}}</h5>
                     <div style="margin-bottom:20px;">
-                        <a href="login"  target="_blank" data-toggle="modal" data-target="#exampleModallo">Đăng nhập để tải game bằng link googledriver</a>
+                        <h5>Để tải được link <span style="color:red">Googledrive</span> các bạn cần <a href="login"  target="_blank" data-toggle="modal" data-target="#exampleModallo" style="color:red">Đăng nhập</a>hoặc <a href="/login" style="color:red">Đăng kí </a></h5>
                     </div>
                 @elseif ( $items->type == 1 && $items->type_link > 1)
                     <h3>{{$items->title}}</h3>
@@ -207,7 +205,7 @@
             @else
                 @if ( $items->type == 1)
                     <h3>{{$items->title}}</h3>
-                    <p class="yellow">{{$items->link}}:</p>
+                    <p class="yellow">{{$items->link}}</p>
                     <h5>{{$items->list_type->link}}:</h5>
                     <a href="javascript:void(0)"  target="_blank">Hiện tại link đã bị khóa</a>
                 @endif
@@ -218,7 +216,7 @@
         @if ( $items->list_type->status == 0)
             @if ( $items->type == 2)
                     <h3>{{$items->title}}</h3>
-                    <p class="yellow">{{$items->link}}:</p>
+                    <p class="yellow">{{$items->link}}</p>
                     <h5>{{$items->list_type->link}}:</h5>
                 <p>
                     @if($items->havelink == 1)
@@ -490,7 +488,7 @@
             var id = {{$games->id}};
             var token =$("input[name='_token']").val(); 
             $.ajax({
-                url:'savelinkgame',
+                url:'https://toplinkvip.com/savelinkgame',
                 type:'post',
                 dataType: 'json',
                 data:{"_token":token,"id":id},
@@ -512,6 +510,7 @@
     .tot a:hover{
         color: red !important; 
         cursor: pointer;
+        text-decoration : none;
     }
     p{
         margin-bottom: 1.5rem;

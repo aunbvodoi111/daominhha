@@ -260,7 +260,7 @@
                     var token =$("input[name='_token']").val();  
                     $.ajax({
                         type: 'POST',
-                        url: "admin/games/editlink/"+this.list_Type.id,
+                        url: "https://toplinkvip.com/admin/games/editlink/"+this.list_Type.id,
                         data: {
                             "_token":token,
                             'listTagName' : vm.list_Type

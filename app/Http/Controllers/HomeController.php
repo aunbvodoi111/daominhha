@@ -150,7 +150,11 @@ class HomeController extends Controller
                     return view('Frontend.Pages.checkAuthDownload',compact('background'));
                 } 
             }else{
-                return redirect('/login');
+                $data = Link_list::where('code',$id)->first();
+              
+                $id = $data->code;
+                return view('Frontend.Pages.linkgoogle',compact('background','id','data'));
+                // return redirect('/login');
             }
         }else{
             return view('Frontend.Pages.linkgoogle',compact('background','data','totalGame'));
@@ -185,8 +189,10 @@ class HomeController extends Controller
     
     
     public function download($id){
+        // dd(1);
         $background = 1;
-        return view('Frontend.Pages.download',['id' => $id]);
+        $data = Link_list::find($id);
+        return view('Frontend.Pages.download',['id' => $id,'data' => $data]);
     }
 
     public function donate(){

@@ -13,7 +13,7 @@ use App\TitleLink;
 use App\List_Type;
 use App\totalGame;
 use View;
-class GamesController extends Controller
+class GamesNewController extends Controller
 {
 	public function __construct(){
         $totalGame = totalGame::find(1);

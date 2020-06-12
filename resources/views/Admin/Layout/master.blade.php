@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>Sufee Admin - HTML5 Admin Template</title>
-    <base href="{{asset('/backend')}}">
+    <base href="{{asset('public/backend')}}">
     <meta name="description" content="Sufee Admin - HTML5 Admin Template">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -266,7 +266,7 @@
     <script src="assets/js/main.js"></script>
 
     
-    <script src="assets/js/lib/data-table/datatables.min.js"></script>
+    {{-- <script src="assets/js/lib/data-table/datatables.min.js"></script>
     <script src="assets/js/lib/data-table/dataTables.bootstrap.min.js"></script>
     <script src="assets/js/lib/data-table/dataTables.buttons.min.js"></script>
     <script src="assets/js/lib/data-table/buttons.bootstrap.min.js"></script>
@@ -283,7 +283,7 @@
     <script src="assets/js/lib/vector-map/jquery.vmap.js"></script>
     <script src="assets/js/lib/vector-map/jquery.vmap.min.js"></script>
     <script src="assets/js/lib/vector-map/jquery.vmap.sampledata.js"></script>
-    <script src="assets/js/lib/vector-map/country/jquery.vmap.world.js"></script>
+    <script src="assets/js/lib/vector-map/country/jquery.vmap.world.js"></script> --}}
     <script>
         ( function ( $ ) {
             "use strict";

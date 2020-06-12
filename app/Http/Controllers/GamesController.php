@@ -21,9 +21,9 @@ class GamesController extends Controller
     }
 	
     public function getDanhSach(){
-    	//$games = GamesModel::all();
-    	$games = GamesModel::select('id', 'Name', 'Email', 'KichThuoc', 'SoPart', 'SoLuotXem', 'AnhChinh', 'AnhMini', 'created_at')->get();
-    	return view('Admin.Games.danhsach', ['games' => $games]);
+		
+		$data = GamesModel::select('id', 'Name', 'Email', 'KichThuoc', 'SoPart', 'SoLuotXem', 'AnhChinh', 'AnhMini', 'created_at')->paginate(10);
+        return view('Admin.Games.danhsach',compact('data'));
     }
 
     public function getThem(Tag $tag){
@@ -37,6 +37,31 @@ class GamesController extends Controller
         ]);
 	}
 
+	public function fetch_data(Request $request)
+    {
+		
+     if($request->ajax())
+     {
+      $data = GamesModel::select('id', 'Name', 'Email', 'KichThuoc', 'SoPart', 'SoLuotXem', 'AnhChinh', 'AnhMini', 'created_at')->paginate(10);
+      return view('Admin.Games.pagination_data', compact('data'))->render();
+     }
+	}
+
+	public function fetch_search(Request $request,$id){
+		
+     if($request->ajax())
+     {
+      if($id ==''){
+		$data = GamesModel::select('id', 'Name', 'Email', 'KichThuoc', 'SoPart', 'SoLuotXem', 'AnhChinh', 'AnhMini', 'created_at')->paginate(10);
+     	return view('Admin.Games.pagination_data', compact('data'))->render();
+	  }else{
+		$data = GamesModel::select('id', 'Name', 'Email', 'KichThuoc', 'SoPart', 'SoLuotXem', 'AnhChinh', 'AnhMini', 'created_at')->where('Name', 'LIKE', '%' . $id . '%')->orWhere('Email', 'LIKE', '%' . $id . '%')->orWhere('id', 'LIKE', '%' . $id . '%')->paginate(10);
+		return view('Admin.Games.pagination_data', compact('data'))->render();
+	  }
+     }
+	}
+	
+	
 	public function getAddlink($id){
 		$theloai = TheLoaiModel::all();
 		$listType = List_Type::all();
@@ -181,7 +206,7 @@ class GamesController extends Controller
     		$themtag->id_Games = $games->id;
     		$themtag->save();
     	}
-		Session()->flush();
+		session()->forget('theloai');
 		$id = $games->id;
     	return redirect('admin/games/addlink/'.$id )->with('thongbao', 'Thêm thành công');
     }
@@ -231,7 +256,7 @@ class GamesController extends Controller
 		$games->AnhMini = $request->AnhMini;
     	$games->GioiThieu = $request->GioiThieu;
     	$games->NoiDung = $request->NoiDung;
-    	$games->LinkGame = $request->LinkGame;
+    	$games->LinkGame = '';
         $tagcurent = TagModel::where('id_Games', $id)->get();
         foreach ($tagcurent as $data) {
             $data->TagName = $data->tag_theloai->Name.'-'.$request->Name;

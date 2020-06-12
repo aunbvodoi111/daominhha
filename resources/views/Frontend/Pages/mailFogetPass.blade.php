@@ -44,7 +44,7 @@
             var _token = $("input[name='_token']").val();
             var email = $('.email').val();
             $.ajax({
-                url: "/ForgotPassword",
+                url: "https://toplinkvip.com/ForgotPassword",
                 type:'POST',
                 data: {_token:_token, email:email, g_recaptcha_response: grecaptcha.getResponse()},
                 success: function(data) {

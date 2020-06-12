@@ -15,6 +15,10 @@
 //     return view('welcome');
 // });
 
+Route::get('/index', 'PostController@store');
+Route::post('/posts', 'PostController@store');
+
+
 Route::get('/', 'HomeController@getHome');
 Route::get('games-detail/{TenKhongDau}/{id}.html', 'HomeController@getGamesDetail');
 Route::get('games-theloai/{TenKhongDau}/{idTheLoai}.html', 'HomeController@getGamesTheLoai');
@@ -97,7 +101,8 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::get('danhsach', 'GamesController@getDanhSach');
         Route::get('linkmn', 'GamesController@getLinkmn');
         
-        
+        Route::get('pagination/fetch_data', 'GamesController@fetch_data');
+        Route::get('pagination/search/{id}', 'GamesController@fetch_search');
         Route::get('themdetail/{id}', 'GamesController@getThemDetail');
         Route::post('themdetail/{id}', 'GamesController@postThemDetail');
         Route::get('addlink/{id}', 'GamesController@getAddlink');
@@ -149,6 +154,11 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
     Route::group(['prefix' => 'user'], function() {
         Route::get('danhsach', 'UserController@getDanhSach');
 
+        Route::post('update_fb', 'UserController@update_fb');
+
+        Route::get('ipuser/{id}', 'UserController@ip');
+        Route::get('deleteip/{idg}/{id}', 'UserController@deleteip');
+
         Route::get('them', 'UserController@getThem');
         Route::post('them', 'UserController@postThem');
 
@@ -158,6 +168,9 @@ Route::group(['prefix' => 'admin', 'middleware' => 'adminlogin'], function() {
         Route::get('xoa/{id}', 'UserController@getXoa');
 
         Route::get('info', 'UserController@getInfo');
+
+        Route::get('pagination/fetch_data', 'UserController@fetch_data');
+        Route::get('pagination/search/{id}', 'UserController@fetch_search');
     });
 
 });

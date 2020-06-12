@@ -155,7 +155,7 @@
     <!-- START: Styles -->
 
     <!-- Google Fonts -->
-	<base href="{{asset('/frontend')}}">
+	<base href="{{asset('public/frontend')}}">
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700%7cOpen+Sans:400,700" rel="stylesheet" type="text/css">
 
     <!-- Bootstrap -->
@@ -208,7 +208,7 @@
             {
                 var token =$("input[name='_token']").val();  	
                 $.ajax({
-                    url:'userCheckF',
+                    url:'https://toplinkvip.com/userCheckF',
                     type:'post',
                     dataType: 'json',
                     data:{"_token":token},
@@ -396,12 +396,12 @@
             var password = $('.passwordlg').val();
             var email = $('.emaillg').val();
             $.ajax({
-                url: "/admin/login",
+                url: "https://toplinkvip.com/admin/login",
                 type:'POST',
                 data: {_token:_token,password:password, email:email},
                 success: function(data) {
                     if(data.success){
-                        swal('Thành công','Bạn vui lòng xác nhận email','success')
+                        swal('Thành công','Bạn đã đăng nhập thành công','success')
                         $('.namere').val('');
                         $('.passwordre').val('');
                         $('.emailre').val('');

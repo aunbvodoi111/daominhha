@@ -40,8 +40,11 @@
                         <div class="card-header">
                             <strong class="card-title">Data Table</strong>
                         </div>
-                        <div class="card-body">
-                          <table id="bootstrap-data-table" class="table table-striped table-bordered" style="text-align: center;">
+                        <input type="text" name="" id="" class="keyup form-control" placeholder="Tìm kiếm">
+                        <div class="card-body" id="table_data">
+                          
+                          @include('Admin.Games.pagination_data')
+                          {{-- <table id="bootstrap-data-table" class="table table-striped table-bordered" style="text-align: center;">
                             <thead>
                               <tr>
                                 <th>id</th>
@@ -80,7 +83,7 @@
                               </tr>
                             @endforeach
                             </tbody>
-                          </table>
+                          </table> --}}
                         </div>
                     </div>
                 </div>
@@ -101,4 +104,38 @@
       }
     }
   </script>
+  <script>
+    $(document).ready(function(){
+    
+     $(document).on('click', '.pagination a', function(event){
+      event.preventDefault(); 
+      var page = $(this).attr('href').split('page=')[1];
+      fetch_data(page);
+     });
+    
+     function fetch_data(page)
+     {
+      $.ajax({
+       url:"https://toplinkvip.com/admin/games/pagination/fetch_data?page="+page,
+       success:function(data)
+       {
+        $('#table_data').html(data);
+       }
+      });
+     }
+
+     $(".keyup").keyup(function(){
+        var keyword = $(this).val()
+        $.ajax({
+        url:"https://toplinkvip.com/admin/games/pagination/search/"+keyword,
+        success:function(data)
+        {
+          $('#table_data').html(data);
+        }
+        });
+    });
+     
+     
+    });
+    </script>
 @endsection

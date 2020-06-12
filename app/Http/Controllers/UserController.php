@@ -15,6 +15,7 @@ use Validator;
 use App\totalGame;
 use View;
 use App\UserIp;
+Use App\Jobs\SendPostEmail;
 class UserController extends Controller
 {
 	//
@@ -37,9 +38,33 @@ class UserController extends Controller
         
     }
     public function getDanhSach(){
-    	$users = User::all();
-    	return view('Admin.Users.danhsach', ['users' => $users]);
+    	$data = User::paginate(8);
+    	return view('Admin.Users.danhsach', ['data' => $data]);
     }
+
+	public function fetch_data(Request $request)
+    {
+		
+     if($request->ajax())
+     {
+      $data = User::paginate(8);
+      return view('Admin.Users.pagination_data', compact('data'))->render();
+     }
+	}
+
+	public function fetch_search(Request $request,$id){
+		
+     if($request->ajax())
+     {
+      if($id ==''){
+		$data = User::paginate(8);
+     	return view('Admin.Users.pagination_data', compact('data'))->render();
+	  }else{
+		$data = User::where('email', 'LIKE', '%' . $id . '%')->orWhere('name', 'LIKE', '%' . $id . '%')->orWhere('id', 'LIKE', '%' . $id . '%')->paginate(8);
+		return view('Admin.Users.pagination_data', compact('data'))->render();
+	  }
+     }
+	}
 
     public function getThem(){
     	return view('Admin.Users.them');
@@ -193,6 +218,13 @@ class UserController extends Controller
 		}
         
 	}
+
+	public function update_fb(Request $request){
+		$user = User::find($request->id);
+		$user->facebook = $request->fb;
+		$user->save();
+		return response()->json(['success'=>'Update success.']);
+	}
 	public function storeCaptchaForm(Request $request)
     {
 		$validator = Validator::make($request->all(), 
@@ -228,6 +260,7 @@ class UserController extends Controller
 			);
 			$user->remember_token = $name['code'];
 			$user->save();
+			// $this->dispatch(new SendPostEmail($user));
 			Mail::to($user->email)->send(new SendMailable($user));
 			// Mail::to('phamquycntta@gmail.com')->send(new SendMailable($user));
 			return response()->json(['success'=>'Added new records.']);
@@ -246,6 +279,20 @@ class UserController extends Controller
 			return redirect('/');
 		}
 	}
+
+	public function ip($id){
+		$background = 1;
+		$data = UserIp::where('id_user',$id)->get();
+		return view('Admin.Users.ip',compact('background','data'));
+	}
+
+	public function deleteip($idq,$id){
+		$background = 1;
+		$data = UserIp::find($id);
+		$data->delete();
+		return redirect('admin/user/ipuser/'.$idq)->with('thongbao', 'Xoá thành công');
+	}
+
 	public function ForgotPassword(){
         $background = 1;
         return view('Frontend.Pages.mailFogetPass',compact('background'));
